@@ -40,7 +40,8 @@ namespace ContainerLoadPlanner
         {
             _container = new SimpleContainer();
             _container.Instance(_container);
-           
+            _container.Singleton<ClientViewModel, TescoViewModel>("Tesco");
+            _container.Singleton<ClientViewModel, TargetViewModel>("Target");
             _container.Singleton<IWindowManager, WindowManager>();
             _container.RegisterPerRequest(typeof(MainViewModel), null, typeof(MainViewModel));
 
