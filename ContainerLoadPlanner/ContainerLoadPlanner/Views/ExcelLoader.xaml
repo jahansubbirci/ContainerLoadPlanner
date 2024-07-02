@@ -1,0 +1,104 @@
+﻿<UserControl x:Class="ContainerLoadPlanner.Views.ExcelLoader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ContainerLoadPlanner.Views"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <sys:Double x:Key="ControlHeight">50</sys:Double>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid>
+           
+        </Grid>
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Margin="0,30,0,0"
+                    >
+            <StackPanel>
+                <TextBlock x:FieldModifier="public"  x:Name="TitleBlock" 
+     Margin="-160,0,0,0"
+            Width="auto"
+      HorizontalAlignment="Center" VerticalAlignment="Top" 
+      Height="30"  Text="{Binding Title}" Foreground="White" 
+                         
+      FontFamily="Maersk Headline" FontSize="20"  AutomationProperties.AccessKey="TitleKey"
+      ></TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="10,10,0,0"
+                        >
+            <TextBox
+                Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                Width="350"
+                BorderBrush="{DynamicResource BorderBrush}"
+                md:HintAssist.Hint="{Binding FileNameHint}"
+                md:HintAssist.IsFloating="True"
+                md:HintAssist.FloatingScale="1.4"
+                md:HintAssist.Background="{DynamicResource GradientBackground}"
+                md:HintAssist.Foreground="White"
+                md:HintAssist.HintOpacity="1"
+                Foreground="White"
+                x:Name="FilePathTextBox"
+                Text="{Binding FilePath, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
+                />
+                <Button 
+                    HorizontalAlignment="Center"
+                    Margin="10"
+                    Width="120"
+                    Height="{DynamicResource ControlHeight}"
+                    Content="Browse"
+                    x:Name="BrowseFile"
+                    Click="BrowseFile_Click"
+                 ></Button>
+            </StackPanel>
+            <StackPanel
+                HorizontalAlignment="Center"
+                Margin="10,20,0,0">
+                <ComboBox
+                    HorizontalAlignment="Center"
+                    Width="350"
+                    Margin="-135,0,0,0"
+                    Style="{DynamicResource MaterialDesignOutlinedComboBox}"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    md:HintAssist.Hint="{Binding SheetNameHint}"
+                    md:HintAssist.IsFloating="True"
+                    md:HintAssist.FloatingScale="1.4"
+                    md:HintAssist.Background="{DynamicResource GradientBackground}"
+                    md:HintAssist.Foreground="White"
+                    md:HintAssist.HintOpacity="1"
+                    Foreground="{DynamicResource MaterialDesignShadowBrush}"
+                    x:Name="SheetNameCombo"
+                    SelectedItem="{Binding SelectedSheet,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
+                    ></ComboBox>
+                
+                
+            </StackPanel>
+            <StackPanel
+                HorizontalAlignment="Center"
+                Margin="10,20,0,20">
+                <TextBox
+                    Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                    HorizontalAlignment="Center"
+                    Width="350"
+                    Margin="-135,0,0,0"
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    md:HintAssist.Hint="{Binding RangeHint}"
+                                    md:HintAssist.IsFloating="True"
+md:HintAssist.FloatingScale="1.4"
+md:HintAssist.Background="{DynamicResource GradientBackground}"
+md:HintAssist.Foreground="White"
+md:HintAssist.HintOpacity="1"
+                Foreground="White"
+                    x:Name="RangeTextBox"
+                    Text="{Binding Range,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
+                    ></TextBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

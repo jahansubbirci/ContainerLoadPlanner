@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:ContainerLoadPlanner.Views"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="{DynamicResource AppTitle}" Height="450" Width="800">
+        Title="{DynamicResource AppTitle}" Height="450" Width="800"
+        WindowState="Maximized">
     <Grid>
         <md:Card
             HorizontalAlignment="Stretch"
@@ -14,7 +15,7 @@
             Margin="10"
             Height="auto"
             Background="{DynamicResource GradientBackground}">
-            <Grid Height="200">
+            <Grid Height="120">
                 <TextBlock 
                     Text="{DynamicResource AppTitle}"
                     HorizontalAlignment="Center"
@@ -42,6 +43,7 @@
                     x:Name="Client"
                     ItemsSource="{Binding Clients}"
                     SelectedItem="{Binding SelectedClient}"
+                    ItemContainerStyle="{DynamicResource MaterialDesign3.NavigationRailPrimaryListBoxItem}"
                     Panel.ZIndex="10"
                     Foreground="White"
                     FontWeight="Bold"
@@ -73,8 +75,9 @@
         <md:Card
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Margin="10,170,10,10"
-            Background="{DynamicResource GradientBackground}">
+            Margin="10,140,10,10"
+            Background="{DynamicResource GradientBackground}"
+            >
             <Grid>
                 <ContentControl x:Name="ActiveItem"></ContentControl>
             </Grid>

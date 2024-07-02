@@ -4,44 +4,78 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ContainerLoadPlanner.Views"
+             xmlns:utilities="clr-namespace:ContainerLoadPlanner.Utilities"
              xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="450" d:DesignWidth="1200"
              
              >
     <UserControl.Resources>
         <sys:Double x:Key="ControlHeight">50</sys:Double>
-        <SolidColorBrush x:Key="Foreground">White</SolidColorBrush>
+        <SolidColorBrush x:Key="Foreground">white</SolidColorBrush>
+        <utilities:CfsToColorConverter x:Key="CfsToColorConverter"></utilities:CfsToColorConverter>
+
     </UserControl.Resources>
     <Grid>
+
+        <!--<md:Card Margin="10">
+            <Grid>
+                <StackPanel 
+              Orientation="Horizontal"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Top"
+                    Margin="5"
+                    MinWidth="300"
+                    Width="auto">
+
+                    <ComboBox
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Style="{DynamicResource MaterialDesignOutlinedComboBox}"
+              md:HintAssist.Hint="CFS"
+              md:HintAssist.Background="{DynamicResource GradientBackground}"
+              Width="300"
+             md:HintAssist.FloatingScale="1.4"
+              Foreground="{DynamicResource Foreground}"
+             BorderBrush="{DynamicResource BorderBrush}"
+              Margin="-70,30,0,0"
+              ItemsSource="{Binding CfsCollection}"
+              x:Name="SelectedCfs"
+              ItemContainerStyle="{DynamicResource MaterialDesign3.NavigationRailListBoxItem}"
+              SelectedItem="{Binding SelectedCfs}"
+              
+              >
+
+                        -->
+        <!--<ComboBox.ItemTemplate>
+                      <DataTemplate>
+                          <TextBlock Text="{Binding}" ></TextBlock>
+                      </DataTemplate>
+                  </ComboBox.ItemTemplate>-->
+        <!--
+                    </ComboBox>
+                </StackPanel>
+           
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                
         <StackPanel Orientation="Vertical"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center">
-            <StackPanel 
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    Margin="5">
-                <ComboBox
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Style="{DynamicResource MaterialDesignOutlinedComboBox}"
-                    md:HintAssist.Hint="CFS"
-                    Width="300"
-                    Foreground="{DynamicResource Foreground}"
-                    FontWeight="Bold"
-                    Margin="-140,0,0,0"></ComboBox>
-            </StackPanel>
-            <StackPanel 
+                    Margin="5"
+                    >
+                
+      
+                
+                <StackPanel 
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Margin="5">
+                Margin="30">
                 
                 <TextBox
                     Width="300"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-                    HorizontalAlignment="Center"
                     BorderBrush="{DynamicResource BorderBrush}"
                     md:HintAssist.Hint="CFS Report"
                     md:HintAssist.IsFloating="True"
@@ -49,8 +83,8 @@
                     md:HintAssist.Foreground="{DynamicResource Foreground}"
                     md:HintAssist.FloatingScale="1.3"
                     Foreground="{DynamicResource Foreground}"
-                    x:Name="CfsReportFile"></TextBox>
-                
+                    x:Name="CfsReportFile"/>
+
                 <Button
                     Width="120"
                     HorizontalAlignment="Center"
@@ -60,28 +94,34 @@
                     Background="Transparent"
                     Content="Browse"
                     Foreground="White"
-                    Name="BrowseCfsReportButton"
+                    x:Name="BrowseCfsReportButton"
                     Click="BrowseCfsReportButton_Click"
                     ></Button>
             </StackPanel>
             <StackPanel
                 Orientation="Vertical"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                Margin="0,20,0,0">
+                Margin="5">
                 <ComboBox
                     HorizontalAlignment="Center"
                     Width="300"
                     Style="{DynamicResource MaterialDesignOutlinedComboBox}"
                     Margin="-140,0,0,0"
-                    
+                    BorderBrush="{DynamicResource BorderBrush}"
                     md:HintAssist.Hint="Sheet Name"
                     md:HintAssist.IsFloating="True"
                     md:HintAssist.Background="{DynamicResource GradientBackground}"
                     md:HintAssist.Foreground="{DynamicResource Foreground}"
                     md:HintAssist.FloatingScale="1.3"
-                    Foreground="{DynamicResource Foreground}"
-                    x:Name="CfsReportSheet"></ComboBox>
+                    Foreground="{DynamicResource MaterialDesignShadowBrush}"
+                    x:Name="CfsReportSheets"
+                    SelectedItem="{Binding SelectedCfsReportSheet}"
+                    Panel.ZIndex="20"
+                    ItemContainerStyle="{DynamicResource MaterialDesign3.NavigationDrawerListBoxItem}"
+                    >
+                    
+                </ComboBox>
                 <TextBox
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -92,53 +132,214 @@
                     md:HintAssist.Background="{DynamicResource GradientBackground}"
                     md:HintAssist.Foreground="{DynamicResource MaterialDesign.Brush.Primary}"
                     md:HintAssist.FloatingScale="1.3"
-                    Foreground="{DynamicResource Foreground}"
+                    Foreground="{DynamicResource MaterialDesign.Brush.Primary.Foreground}"
+                    FontWeight="Bold"
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                     x:Name="CfsReportRange"
-                    Text="A1:AZ"></TextBox>
+                    BorderBrush="{DynamicResource BorderBrush}"
+                    Text="A1:AZ"
+                    Panel.ZIndex="1"
+                   ></TextBox>
             </StackPanel>
-            <StackPanel 
-                Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                Margin="0,20,0,0">
-                <TextBox
-     Width="300"
-     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
-     HorizontalAlignment="Center"
-     BorderBrush="{DynamicResource BorderBrush}"
-     md:HintAssist.Hint="PO Upload Report"
-     x:Name="MyMaerskReport"
-                    
- md:HintAssist.IsFloating="True"
- md:HintAssist.Background="{DynamicResource GradientBackground}"
- md:HintAssist.Foreground="{DynamicResource Foreground}"
- md:HintAssist.FloatingScale="1.3"
- Foreground="{DynamicResource Foreground}"
-                    
-                    ></TextBox>
-                <Button
-     Width="120"
-     HorizontalAlignment="Center"
-     Height="{DynamicResource ControlHeight}"
- 
-     Margin="20,0,0,0"
-     Background="Transparent"
-     Content="Browse"
+            
+           
+        </StackPanel>
+                <StackPanel
+                    Orientation="Vertical"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0"
+                   >
+                    <StackPanel
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Stretch"
                    
-     Name="BrowseMyMaerskReport"
-     Click="BrowseMyMaerskReport_Click"
-     ></Button>
+                        >
+                        <TextBox
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            Width="300"
+                            
+                            
+                            HorizontalAlignment="Left"
+                            x:Name="MyMaerskReport"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                             md:HintAssist.Hint="PO Upload Report"
+ md:HintAssist.IsFloating="True"
+ md:HintAssist.FloatingScale="1.4"
+ md:HintAssist.Background="{DynamicResource GradientBackground}"
+                           
+                            >
+                           
+                        </TextBox>
+                        <Button
+                            Background="Transparent"
+                            Content="Browse"
+                            Height="{DynamicResource ControlHeight}"
+                            Margin="20,0,0,0"
+                            Width="120"
+                            x:Name="BrowseMyMaerskReport"></Button>
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0,20,0,0">
+                        <ComboBox
+                            Style="{DynamicResource MaterialDesignOutlinedComboBox}"
+                            Width="300"
+                            HorizontalAlignment="Left"
+                            
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            x:Name="POUploadReportSheet"
+                            md:HintAssist.Hint="Sheet Name"
+  md:HintAssist.IsFloating="True"
+  md:HintAssist.FloatingScale="1.4"
+  md:HintAssist.Background="{DynamicResource GradientBackground}"></ComboBox>
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0,20,0,0">
+                        <TextBox
+                            HorizontalAlignment="Left"
+                            Width="300"
+                            Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                            BorderBrush="{DynamicResource BorderBrush}"
+                            x:Name="POUploadReportRange"
+                            md:HintAssist.Hint="Range"
+                            md:HintAssist.IsFloating="True"
+                            md:HintAssist.FloatingScale="1.4"
+                            md:HintAssist.Background="{DynamicResource GradientBackground}"
+                            Text="A1:BZ"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+                
             </StackPanel>
-            <StackPanel
-                HorizontalAlignment="Center"
-                Margin="0,20,0,0">
-                <Button
-                    Background="Transparent"
-                    Width="450"
-                    Height="{DynamicResource ControlHeight}"
-                    Content="Create CLP"
-                    Foreground="{DynamicResource Foreground}"></Button>
-            </StackPanel>
-        </StackPanel>   
+                <StackPanel
+     HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+     Margin="0,0,0,40">
+                    <Button
+         Background="Transparent"
+         Width="450"
+         Height="{DynamicResource ControlHeight}"
+         Content="Create CLP"
+         Foreground="{DynamicResource Foreground}"></Button>
+                </StackPanel>
+            </Grid>
+        </md:Card>-->
+        <md:Card
+            Margin="10">
+            <Grid HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition
+                        Width="550"/>
+                    
+                    <ColumnDefinition    Width="550"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <StackPanel 
+ Orientation="Horizontal"
+ HorizontalAlignment="Center"
+ VerticalAlignment="Top"
+       Margin="5"
+       MinWidth="300"
+       Width="auto"
+                    Grid.Column="0"
+                    Grid.Row="1">
+
+                    <ComboBox 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{DynamicResource MaterialDesignOutlinedComboBox}"
+                        
+                        md:HintAssist.Hint="CFS"
+                        md:HintAssist.Background="{DynamicResource GradientBackground}"
+                        Width="300"
+                        md:HintAssist.FloatingScale="1.4"
+                        Foreground="{DynamicResource MaterialDesignShadowBrush}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        Margin="-70,30,0,0"
+                        ItemsSource="{Binding CfsCollection}"
+                        x:Name="SelectedCfs"
+                        
+                        
+  
+                        ItemContainerStyle="{DynamicResource MaterialDesign3.NavigationRailPrimaryListBoxItem}"
+                        SelectedItem="{Binding SelectedCfs}"
+                        >
+
+                    </ComboBox>
+                   
+
+                </StackPanel>
+
+                <StackPanel
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Grid.Column="1"
+                    Grid.Row="1"
+                    >
+                   
+                    <CheckBox
+                        Content="CUT OFF"
+                        Width="100"
+                        Height="100"
+                        x:Name="CutOff"
+                        Background="{DynamicResource MaterialDesignDarkSeparatorBackground}"
+                        BorderBrush="{DynamicResource BorderBrush}"
+                        Style="{DynamicResource MaterialDesignActionToggleButton}"
+                        ></CheckBox>
+                </StackPanel>
+
+                <local:ExcelLoader
+                   Title="CFS REPORT"
+                    FileNameHint="CFS Report File"
+                    SheetNameHint="CFS Report Sheet"
+                    RangeHint="Range"
+                    FilePath="{Binding CfsReport,Mode=TwoWay}"
+                    SelectedSheet="{Binding CfsReportSheet,Mode=TwoWay}"
+                    Range="{Binding CfsReportRange,Mode=TwoWay}"
+                    VerticalAlignment="Top"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Margin="10,0,0,20"
+                    BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
+                    BorderThickness="1"
+                    
+                    ></local:ExcelLoader>
+                <local:ExcelLoader
+                    Title="PO UPLOAD REPORT"
+                    FileNameHint="PO Upload Report"
+                    SheetNameHint="PO Upload Sheet Name"
+                    RangeHint="Range"
+                    FilePath="{Binding MyMaerskReport,Mode=TwoWay}"
+                    SelectedSheet="{Binding MyMaerskReportSheet,Mode=TwoWay}"
+                    Range="{Binding MyMaerskReportRange,Mode=TwoWay}"
+                    VerticalAlignment="Top"
+                    md:HintAssist.Hint="PO"
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    Margin="10,0,0,10"
+                    BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
+                    BorderThickness="2"
+                    ></local:ExcelLoader>
+                
+            </Grid>
+        </md:Card>
+        <Button
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Center"
+            Margin="0,0,0,20"
+            Width="400"
+            Background="Transparent"
+            Content="Create CLP"
+            Foreground="White"
+            x:Name="CreateClp"
+            
+            ></Button>
     </Grid>
 </UserControl>

@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelDataExchange", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TescoClpBackend", "TescoClpBackend\TescoClpBackend.csproj", "{FFF36432-06C8-4FEE-BFFC-181EA203EC1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{24E0D7A7-53ED-43A6-A685-27B68A0DF591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TescoClpBackend.Test", "TescoClpBackend.Test\TescoClpBackend.Test.csproj", "{2D5678D7-883E-4159-832C-C3449CCC6ED5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,22 @@ Global
 		{FFF36432-06C8-4FEE-BFFC-181EA203EC1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FFF36432-06C8-4FEE-BFFC-181EA203EC1D}.Release|x86.ActiveCfg = Release|Any CPU
 		{FFF36432-06C8-4FEE-BFFC-181EA203EC1D}.Release|x86.Build.0 = Release|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Debug|x86.Build.0 = Debug|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Release|x86.ActiveCfg = Release|Any CPU
+		{24E0D7A7-53ED-43A6-A685-27B68A0DF591}.Release|x86.Build.0 = Release|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Debug|x86.Build.0 = Debug|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|x86.ActiveCfg = Release|Any CPU
+		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
