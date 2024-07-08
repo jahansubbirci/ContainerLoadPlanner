@@ -139,7 +139,8 @@ namespace ContainerLoadPlanner.ViewModels
         {
             var _windowManager=container.GetInstance<IWindowManager>();
             //string dataToPass = "Hello from MainViewModel!";
-            _windowManager.ShowWindowAsync(new CartViewModel<ClpItem>(dataToPass));
+          //  _windowManager.ShowWindowAsync(new CartWindowViewModel<ClpItem>(dataToPass));
+           _windowManager.ShowWindowAsync(new CartViewModel<ClpItem>(dataToPass),null, new Dictionary<string, object> { { "WindowState", WindowState.Normal } });
         }
     }
 }

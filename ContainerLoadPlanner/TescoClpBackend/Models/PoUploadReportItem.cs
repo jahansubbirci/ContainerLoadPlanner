@@ -22,5 +22,10 @@ namespace TescoClpBackend.Models
         public TransportationMode TransportationMode { get; set; }
         public DateTime IDD { get;  set; }
         public int Priority { get; set; }
+
+        public override string ToString()
+        {
+            return $"{EHD.ToString()}\t{IDD.ToString()}\t{TransportationMode.ToString()}";
+        }
     }
 }

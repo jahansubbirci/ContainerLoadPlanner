@@ -7,41 +7,20 @@
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="CartWindowView" Height="450" Width="800">
+        Title="CartWindowView" Height="450" Width="800" WindowState="Maximized">
     <Grid>
-       
-        <!--<Grid
-            HorizontalAlignment="Left"
-            VerticalAlignment="Stretch"
-            Background="AliceBlue"
-            Width="200"
-            >
+
+        <!--<local:CartView
+            x:Name="CartViewModel"
             
-            <ListBox x:Name="Destinations" 
-                     Style="{DynamicResource MaterialDesignNavigationListBox}"
-                     DisplayMemberPath="." 
-                     SelectedItem="{Binding SelectedDestination}" 
-                     HorizontalAlignment="Left" 
-                     Width="200" />
-                
-            
+            ></local:CartView>-->
+        <Grid>
+            <ComboBox x:Name="Destinations" DisplayMemberPath="." SelectedItem="{Binding SelectedDestination}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+            <ListBox x:Name="SelectedContainers" DisplayMemberPath="ContainerName" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <local:CartView
+                x:Name="CartViewModel"
+                ></local:CartView>
         </Grid>
-        
-        <Grid
-            HorizontalAlignment="Left"
-            VerticalAlignment="Stretch"
-            Background="DarkBlue"
-            Width="100"
-            Margin="200,0,0,0"
-            >
-            <ItemsControl x:Name="SelectedData">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        --><!-- Assuming Container<T> has a property called 'Value' to display --><!--
-                        <local:CartView DataContext="{Binding}"></local:CartView>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Grid>-->
     </Grid>
 </Window>

@@ -15,6 +15,7 @@ namespace SharedEntities
         public List<T> Items { get; set; }
         public Guid ContainerId { get; set; }
         public double RemainingCapacity { get; set; }
+        public double UsedCbm { get; set; }
         public double UnitCost { get; set; }
 
         public Container(string label) {

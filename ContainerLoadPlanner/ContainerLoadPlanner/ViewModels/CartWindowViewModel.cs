@@ -13,7 +13,28 @@ namespace ContainerLoadPlanner.ViewModels
 {
     public class CartWindowViewModel<T> : Screen where T : class
     {
+        private  CartViewModel<T> _cartViewModel; // Example assuming 'object', replace with actual type
+        
+        public BindableCollection<string> Destinations => _cartViewModel.Destinations;
+        public string SelectedDestination
+        {
+            get => _cartViewModel.SelectedDestination;
+            set => _cartViewModel.SelectedDestination = value;
+        }
+        
 
+        public CartViewModel<T> CartViewModel
+        {
+            get { return _cartViewModel; }
+            set { _cartViewModel = value;NotifyOfPropertyChange(() => CartViewModel); }
+        }
+
+        public BindableCollection<ContainerViewModel<T>> SelectedContainers => _cartViewModel.SelectedContainers;
+
+        public CartWindowViewModel(Dictionary<string, List<Container<T>>> data)
+        {
+            _cartViewModel = new CartViewModel<T>(data); // Example assuming 'object', replace with actual type
+        }
         //    public readonly Dictionary<string, List<Container<T>>> data;
 
         //    private string selectedDestination;
