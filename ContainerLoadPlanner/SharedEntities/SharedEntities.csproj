@@ -43,6 +43,10 @@
   <ItemGroup>
     <Compile Include="CfsDataRetriever.cs" />
     <Compile Include="CfsReport.cs" />
+    <Compile Include="Combination.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="ContainerConstants.cs" />
+    <Compile Include="ICombinator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

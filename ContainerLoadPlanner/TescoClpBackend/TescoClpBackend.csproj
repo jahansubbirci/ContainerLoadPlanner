@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NPOI, Version=2.6.0.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,7 +42,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClpLogics\ClpItem.cs" />
+    <Compile Include="ClpLogics\ClpPreparator.cs" />
+    <Compile Include="Combinators\Combinator.cs" />
+    <Compile Include="Combinators\CombinatorConstants.cs" />
+    <Compile Include="Combinators\ConfigurationConstant.cs" />
+    <Compile Include="ContainerLoaders\ContainerLoader.cs" />
+    <Compile Include="ContainerLoaders\IContainerLoader.cs" />
+    <Compile Include="ContainerLoaders\FortyHCLoader.cs" />
+    <Compile Include="DateHelper.cs" />
+    <Compile Include="Models\Container.cs" />
+    <Compile Include="Models\LotItem.cs" />
+    <Compile Include="Models\PoUploadReportItem.cs" />
+    <Compile Include="PoUploadReportDataLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reporting.cs" />
+    <Compile Include="ReportingService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ÉxcelDataExchange\ExcelDataExchange.csproj">
+      <Project>{564182c6-8609-45dc-a0a6-3d9df37f2594}</Project>
+      <Name>ExcelDataExchange</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoggerService\LoggerService.csproj">
+      <Project>{24E0D7A7-53ED-43A6-A685-27B68A0DF591}</Project>
+      <Name>LoggerService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharedEntities\SharedEntities.csproj">
+      <Project>{1ae44d72-e65a-4a80-be35-9060fadeced6}</Project>
+      <Name>SharedEntities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

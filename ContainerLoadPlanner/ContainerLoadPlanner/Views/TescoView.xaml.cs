@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ContainerLoadPlanner.ViewModels;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,18 +24,30 @@ namespace ContainerLoadPlanner.Views
     {
         public TescoView()
         {
+            
             InitializeComponent();
+            
+          //  DataContext = this; //new TescoViewModel();
+            
         }
+        private string cfsReport;
 
+        public string CfsReport
+        {
+            get { return cfsReport; }
+            set { cfsReport = value; }
+        }
+        
         private void BrowseCfsReportButton_Click(object sender, RoutedEventArgs e)
         {
-            BrowseFile(CfsReportFile);
+           // BrowseFile(CfsReportFile);
+            
 
         }
 
         private void BrowseMyMaerskReport_Click(object sender, RoutedEventArgs e)
         {
-            BrowseFile(MyMaerskReport);
+           // BrowseFile(MyMaerskReport);
         }
         private void BrowseFile(TextBox target)
         {
@@ -44,6 +57,16 @@ namespace ContainerLoadPlanner.Views
             {
                 target.Text = openFileDialog.FileName;
             }
+        }
+
+        private void ComboBox_Opened(object sender, RoutedEventArgs e)
+        {
+            //cfsCom
+        }
+
+        private void SelectedCfs_Opened(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

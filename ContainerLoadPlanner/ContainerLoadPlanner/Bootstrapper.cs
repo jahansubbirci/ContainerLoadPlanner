@@ -1,5 +1,8 @@
 ﻿using Caliburn.Micro;
+using ContainerLoadPlanner.Utilities;
 using ContainerLoadPlanner.ViewModels;
+using ContainerLoadPlanner.Views;
+using LoggerService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TescoClpBackend.ClpLogics;
 
 namespace ContainerLoadPlanner
 {
@@ -42,8 +46,14 @@ namespace ContainerLoadPlanner
             _container.Instance(_container);
             _container.Singleton<ClientViewModel, TescoViewModel>("Tesco");
             _container.Singleton<ClientViewModel, TargetViewModel>("Target");
+            _container.Singleton<LoggerManager>();
+            _container.AddExcelServices();
+            _container.AddSharedServices();
+            _container.AddExcelWriterService<ClpItem>();
+            _container.AddTescoServices();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.RegisterPerRequest(typeof(MainViewModel), null, typeof(MainViewModel));
+            _container.PerRequest<CartWindowView>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

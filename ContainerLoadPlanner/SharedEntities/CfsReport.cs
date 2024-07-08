@@ -22,7 +22,7 @@ namespace SharedEntities
         public string Shipper { get; set; }
         public int Lot { get; set; }
         public int Pkgs { get; set; }
-        public string Qty { get; set; }
+        public int Qty { get; set; }
         public string Measurement { get; set; }
         public double Cbm { get; set; }
         public double CWeight{ get; set; }
@@ -56,6 +56,9 @@ namespace SharedEntities
         public string RailNo { get; set; }
         public string InvoiceNo { get; set; }
         public string Id { get; set; }
-
+        public override string ToString()
+        {
+            return $"{So}\t{Consignee}\t{Shipper}\t{Lot}\t{Pkgs}\t{Qty}\t{Measurement}\t{Cbm}\t{CWeight}\t{Destination}\t{PO}\t{Style}\t{Item}\t";
+        }
     }
 }
