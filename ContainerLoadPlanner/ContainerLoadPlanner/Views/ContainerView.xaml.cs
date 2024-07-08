@@ -24,5 +24,10 @@ namespace ContainerLoadPlanner.Views
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            dataGrid.Visibility = Visibility.Visible;
+        }
     }
 }

@@ -131,7 +131,7 @@ namespace TescoClpBackend.ClpLogics
                         .Where(a =>
                         a.Items.Sum(i => i.CfsReportItem.Cbm) < ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME)
                         .ToList();
-                    nonPriorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
+                    nonPriorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:\t{a.CfsReportItem.ToString()}"));
 
 
 
@@ -147,9 +147,13 @@ namespace TescoClpBackend.ClpLogics
                     Combination combination = combinator.GetCombination(cbm, true);
 
                     containers = containerLoader.Load(combination, ref destItems);
+
                     destItems.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
 
                 }
+
+                //var underUtilized= containers.FindAll(a => a.Items.Sum(a => a.CfsReportItem.Cbm) < a.MinAccepatableVolume);
+                
                 //   destContainers.Add(destination.Key, containers);
                 if (!destContainers.ContainsKey(destination.Key))
                 {
@@ -160,7 +164,12 @@ namespace TescoClpBackend.ClpLogics
                     destContainers[destination.Key].AddRange(containers);
                 }
 
-
+                destContainers[destination.Key].ForEach(a => a.UsedCbm = a.Items.Sum(i => i.CfsReportItem.Cbm));
+                 var c = destContainers[destination.Key]
+                    .Where(a => a.UsedCbm < a.MinAccepatableVolume)
+                    .ToList();
+                c.ForEach(a => a.Items.ForEach(i => loggerManager.LogInfo($"\tLeft Over:\t{i.CfsReportItem.ToString()}")));
+                destContainers[destination.Key].RemoveAll(a => a.UsedCbm < a.MinAccepatableVolume);
             }
             return destContainers;
         }

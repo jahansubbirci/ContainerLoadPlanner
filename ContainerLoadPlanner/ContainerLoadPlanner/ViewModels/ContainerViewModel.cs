@@ -20,9 +20,9 @@ namespace ContainerLoadPlanner.ViewModels
         {
             Container = container;
             this.Items=container.Items;
-            Summary = SetSummary(this.Items);
-        
+            TotalCbm = container.UsedCbm;
             
+
         }
 
         public  T SetSummary(List<T> items) 
@@ -63,7 +63,20 @@ namespace ContainerLoadPlanner.ViewModels
                 return true;   
             }return false;
         }
-        private static bool IsNumericType(Type type)
+
+       public void GetNumericProperty(Type t)
+        {
+            if (IsCustomObjectType(t))
+            {
+                var x=Activator.CreateInstance(t);
+                foreach (var property in x.GetType().GetProperties())
+                {
+                    GetNumericProperty(property.PropertyType);
+                }
+            }
+           
+        }
+        private  bool IsNumericType(Type type)
         {
             switch (Type.GetTypeCode(type))
             {
@@ -85,6 +98,7 @@ namespace ContainerLoadPlanner.ViewModels
         }
 
         public List<T> Items { get; private set; }
-        public T Summary { get; set; }
+        public double TotalCbm { get; private set; }
+      
     }
 }
