@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ContainerLoadPlanner.Utilities;
 using ContainerLoadPlanner.ViewModels;
+using ContainerLoadPlanner.Views;
 using LoggerService;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,7 @@ namespace ContainerLoadPlanner
             _container.AddTescoServices();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.RegisterPerRequest(typeof(MainViewModel), null, typeof(MainViewModel));
+            _container.PerRequest<CartWindowView>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

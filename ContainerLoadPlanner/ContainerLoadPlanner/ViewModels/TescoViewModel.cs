@@ -35,15 +35,28 @@ namespace ContainerLoadPlanner.ViewModels
             this.container = container;
             reportingService = container.GetInstance<Reporting>();
         }
+        
 
         private string myMaerskReport;
         private bool cutOff;
+
+
+
+        private Dictionary<string,List<Container<ClpItem>>> cartData;
+
+        public Dictionary<string,List<Container<ClpItem>>> CartData
+        {
+            get { return cartData; }
+            set { cartData = value; NotifyOfPropertyChange(() => CartData); }
+        }
+
 
         public bool CutOff
         {
             get { return cutOff; }
             set { cutOff = value; NotifyOfPropertyChange(() => CutOff); }
         }
+
 
         public string MyMaerskReport
         {
@@ -104,14 +117,29 @@ namespace ContainerLoadPlanner.ViewModels
                 var poData = await Task.Run(() => poUploadReportDataLoader.GetPoReport(MyMaerskReport));
                 cfsData = cfsData.Where(a => !a.Measurement.Equals("0X0X0"));
                 var clp = clpPreparator.Create(cfsData, poData, false);
+                CartData = clp;
+                OpenCartWindow(CartData);
+                //clp.TryGetValue("NORTHAMPTON", out var northamptopnContainers);
+                //if(northamptopnContainers != null)
+                //{
+
+                //}
                 string fileName = $"TESCO CLP {DateTime.Today.ToString("yyyy-MMM-dd")}.xlsx";
-                reportingService.CreateReport(fileName, clp);
+
+             //   reportingService.CreateReport(fileName, clp);
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        public void OpenCartWindow(Dictionary<string,List<Container<ClpItem>>>dataToPass)
+        {
+            var _windowManager=container.GetInstance<IWindowManager>();
+            //string dataToPass = "Hello from MainViewModel!";
+            _windowManager.ShowWindowAsync(new CartViewModel<ClpItem>(dataToPass));
         }
     }
 }

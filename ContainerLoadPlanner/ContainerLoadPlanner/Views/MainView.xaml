@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="{DynamicResource AppTitle}" Height="450" Width="800"
         WindowState="Maximized">
-    <Grid>
+    <Grid Background="DarkBlue">
         <md:Card
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
@@ -50,6 +50,7 @@
                     FontSize="14"
                     FontStretch="ExtraExpanded"
                     FontFamily="Courier New"
+                    
                     >
                         
                  

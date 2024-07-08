@@ -43,11 +43,11 @@ namespace TescoClpBackend.ContainerLoaders
                     }
                 });
                 lotGroup = lotGroup
-                    .OrderByDescending(a => a.Priority)
-                    .ThenByDescending(a => a.TotalCbm)
+                    //.OrderByDescending(a => a.Priority)
+                    .OrderByDescending(a => a.TotalCbm)
                     .ToList();
 
-                LoadUntilCap(ref lotGroup, ref container, previousCapacity,ref containers);
+                LoadUntilCap(ref lotGroup, ref container, previousCapacity);
 
                 data.RemoveAll(a => container.Items.Contains(a));
                 if (container.RemainingCapacity < 0.5)
@@ -67,18 +67,18 @@ namespace TescoClpBackend.ContainerLoaders
         }
 
 
-        public double LoadQn(ref List<LotItem> lotList, ref Container<ClpItem> container, ref Stack<Container<ClpItem>> containers)
+        public double LoadQn(ref List<LotItem> lotList, ref Container<ClpItem> container)
         {
             //lotList.OrderByDescending(a=>a.TotalCbm).ToList();
             
 
             var capacity = container.RemainingCapacity;
-           // lotList = lotList.Where(a => (capacity - a.TotalCbm) > 0).ToList();
-            if (lotList.Count() > 0)
+          var  viableLot = lotList.Where(a => (capacity - a.TotalCbm) > 0).ToList();
+            if (viableLot.Count() > 0)
             {
              //   var viableLots = lotList.Where(a => (capacity - a.TotalCbm) >= 0);
-                var closest = lotList
-                   
+                var closest = viableLot
+
                     .Aggregate((x, y)=>
                      (capacity - x.TotalCbm) >= 0
                     && (capacity - y.TotalCbm )>= 0
@@ -145,14 +145,14 @@ namespace TescoClpBackend.ContainerLoaders
 
 
 
-        private void LoadUntilCap(ref List<LotItem> lotGroup, ref Container<ClpItem> container, double previousCapacity, ref Stack<Container<ClpItem>> containers)
+        private void LoadUntilCap(ref List<LotItem> lotGroup, ref Container<ClpItem> container, double previousCapacity)
         {
             
             while (container.RemainingCapacity > 0 && lotGroup.Count() > 0)
             {
                 previousCapacity = container.RemainingCapacity;
                 /*(dcList,container)=*/
-                var capacity = LoadQn(ref lotGroup, ref container,ref containers);
+                var capacity = LoadQn(ref lotGroup, ref container);
                 if (previousCapacity == capacity)
                 {
                     break;
@@ -164,6 +164,28 @@ namespace TescoClpBackend.ContainerLoaders
 
         protected abstract Stack<Container<ClpItem>> InitiateContainers(Combination combination);
 
+
+        public void FillUpUnderUtilizedContainer(Container<ClpItem> container, ref List<ClpItem> nonPriorityGroup)
+        {
+            var lg = nonPriorityGroup
+                .GroupBy(a => a.CfsReportItem.Lot)
+                .Select(lot => new LotItem(lot))
+                .ToList();
+            
+            LoadUntilCap(ref lg, ref container,container.RemainingCapacity);
+            nonPriorityGroup.RemoveAll(a => container.Items.Contains(a));
+            //var sum = 0d;
+            //var itemsToTake = lg.TakeWhile(c => (sum + c.TotalCbm) < container.RemainingCapacity).ToList();
+            ////container.Items.AddRange(itemsToTake);
+            //foreach (var item in itemsToTake)
+            //{
+            //    container.Items.AddRange(item.Item.ToList());
+            //}
+            //foreach (var item in itemsToTake)
+            //{
+            //    nonPriorityGroup.RemoveAll(a => item.Item.Select(i => i).Contains(a));
+            //}
+        }
     }
 
 }

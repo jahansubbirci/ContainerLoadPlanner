@@ -2,6 +2,7 @@
 using SharedEntities;
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
@@ -39,7 +40,7 @@ namespace TescoClpBackend.ClpLogics
                 .ToList();
             airShipmentPo.ForEach(a => loggerManager
             .LogInfo($"PO: {a.Po} is of AIR SHIPMENT WITH SHIPMENT MODE BDDAC"));
-            
+
             var poUploadList = poUploadReport
                 .Where(a => a.TransportationMode == TransportationMode.BDCGP)
                 .ToList();
@@ -50,7 +51,7 @@ namespace TescoClpBackend.ClpLogics
                     a.Priority = Int32.MaxValue;
                 }
             });
-            
+
 
             var clpData = from cfs in cfsReport
                           join poItem in poUploadReport on cfs.PO equals poItem.Po
@@ -81,10 +82,13 @@ namespace TescoClpBackend.ClpLogics
                         a.Priority = Int32.MaxValue;
                     }
                 });
-                
-                var priorityGroups=lotGroups.GroupBy(a => a.Priority);
-                List<ClpItem>priorityGroup= new List<ClpItem>();
-                List<ClpItem>nonPriorityGroup=new List<ClpItem>();
+
+                LoadFullContainerLots(destContainers, destination, ref lotGroups);
+                LoadMoreThanContainerLots(destContainers, destination, ref lotGroups);
+
+                var priorityGroups = lotGroups.GroupBy(a => a.Priority);
+                List<ClpItem> priorityGroup = new List<ClpItem>();
+                List<ClpItem> nonPriorityGroup = new List<ClpItem>();
                 foreach (var priority in priorityGroups)
                 {
                     if (priority.Key > 0)
@@ -102,36 +106,133 @@ namespace TescoClpBackend.ClpLogics
                         }
                     }
                 }
-
-                var priorityCbm = priorityGroup.Sum(a => a.CfsReportItem.Cbm);
-                Combination priorityCombination = combinator.GetCombination(priorityCbm, false);
-                List<Container<ClpItem>> priorityContainers = new List<Container<ClpItem>>();
-                priorityContainers = containerLoader.Load(priorityCombination, ref priorityGroup);
-                priorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
-
-
-                var nonPriorityCbm = nonPriorityGroup.Sum(a => a.CfsReportItem.Cbm);
-                Combination nonPriorityCombination=combinator.GetCombination(nonPriorityCbm, true);
-                List<Container<ClpItem>> nonPriorityContainers = new List<Container<ClpItem>>();
-                nonPriorityContainers=containerLoader.Load(nonPriorityCombination, ref nonPriorityGroup);
-                nonPriorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
-
-                
-                //var cbm = destination.Sum(a => a.CfsReportItem.Cbm);
-
-                //Combination combination = combinator.GetCombination(cbm,true);
                 List<Container<ClpItem>> containers = new List<Container<ClpItem>>();
-                containers.AddRange(priorityContainers);
-                containers.AddRange(nonPriorityContainers);
 
-                destContainers.Add(destination.Key, containers);
+                if (lotGroups.Sum(a => a.TotalCbm) > ContainerConstants.FORTY_HI_DEFAULT_CAPACITY)
+                {
+                    var priorityCbm = priorityGroup.Sum(a => a.CfsReportItem.Cbm);
+                    Combination priorityCombination = combinator.GetCombination(priorityCbm, false);
+                    List<Container<ClpItem>> priorityContainers = new List<Container<ClpItem>>();
+                    priorityContainers = containerLoader.Load(priorityCombination, ref priorityGroup);
+                    priorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
 
-                //containers = containerLoader.Load(combination, ref destItems);
-                //destItems.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
-                //destContainers.Add(destination.Key, containers);
+                    var underUtilizedContainers =
+                        priorityContainers.Where(a => a.Items.Sum(i => i.CfsReportItem.Cbm) < a.MinAccepatableVolume).ToList();
+                    foreach (var container in underUtilizedContainers)
+                    {
+                        containerLoader.FillUpUnderUtilizedContainer(container, ref nonPriorityGroup);
+                    }
+
+                    var nonPriorityCbm = nonPriorityGroup.Sum(a => a.CfsReportItem.Cbm);
+                    Combination nonPriorityCombination = combinator.GetCombination(nonPriorityCbm, true);
+                    List<Container<ClpItem>> nonPriorityContainers = new List<Container<ClpItem>>();
+                    nonPriorityContainers = containerLoader.Load(nonPriorityCombination, ref nonPriorityGroup);
+                    underUtilizedContainers = nonPriorityContainers
+                        .Where(a =>
+                        a.Items.Sum(i => i.CfsReportItem.Cbm) < ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME)
+                        .ToList();
+                    nonPriorityGroup.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
+
+
+
+
+                    containers.AddRange(priorityContainers);
+
+                    containers.AddRange(nonPriorityContainers);
+                }
+                else
+                {
+                    var cbm = destination.Sum(a => a.CfsReportItem.Cbm);
+
+                    Combination combination = combinator.GetCombination(cbm, true);
+
+                    containers = containerLoader.Load(combination, ref destItems);
+                    destItems.ForEach(a => loggerManager.LogInfo($"\tLeft over:{a.CfsReportItem.ToString()}"));
+
+                }
+                //   destContainers.Add(destination.Key, containers);
+                if (!destContainers.ContainsKey(destination.Key))
+                {
+                    destContainers.Add(destination.Key, containers);
+                }
+                else
+                {
+                    destContainers[destination.Key].AddRange(containers);
+                }
+
 
             }
             return destContainers;
+        }
+
+
+
+        private void LoadMoreThanContainerLots(Dictionary<string, List<Container<ClpItem>>> destContainers, IGrouping<string, ClpItem> destination, ref List<LotItem> lotGroups)
+        {
+            var moreThanContainerLots = lotGroups.Where(a => a.TotalCbm > ContainerConstants.FORTY_HI_DEFAULT_CAPACITY + ContainerConstants.FORTY_HI_TOLERANCE).ToList();
+            foreach (var container in moreThanContainerLots)
+            {
+                Container<ClpItem> c = new Container<ClpItem>("40HI");
+                c.MaxCapacity = ContainerConstants.FORTY_HI_DEFAULT_CAPACITY + ContainerConstants.FORTY_HI_TOLERANCE;
+                c.RemainingCapacity = c.MaxCapacity;
+                var clone = container.Clone() as LotItem;
+                double sum = 0d;
+
+                var cap = c.MaxCapacity;
+                var itemsToTake = container.Item.TakeWhile(i => (sum += i.CfsReportItem.Cbm) <= cap).ToList();
+                c.Items.AddRange(itemsToTake);
+
+                //var remainingItems = container.Item.Where(a => !itemsToTake.Contains(a)).ToList();
+
+                lotGroups.Remove(container);
+
+                var remainingItems = clone.Item
+                    .Where(item => !itemsToTake.Contains(item)).ToList();
+                remainingItems.ForEach(a => a.PoUploadReportItem.Priority = Int32.MaxValue);
+                var remainingItem = remainingItems.GroupBy(a => a.CfsReportItem.Lot)
+                    .First(a => a.Key == clone.Item.Key);
+                if (remainingItem != null)
+                {
+                    
+                    var l = new LotItem(remainingItem);
+                    lotGroups.Add(l);
+                }
+
+                c.RemainingCapacity -= itemsToTake.Sum(a => a.CfsReportItem.Cbm);
+
+                if (destContainers.ContainsKey(destination.Key))
+                {
+                    destContainers[destination.Key].Add(c);
+                }
+                else
+                {
+                    destContainers.Add(destination.Key, new List<Container<ClpItem>>() { c });
+                }
+            }
+
+        }
+
+        private static void LoadFullContainerLots(Dictionary<string, List<Container<ClpItem>>> destContainers, IGrouping<string, ClpItem> destination, ref List<LotItem> lotGroups)
+        {
+            var singleContainerLots = lotGroups.Where(a =>
+            a.TotalCbm >= ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME &&
+            a.TotalCbm <= (ContainerConstants.FORTY_HI_DEFAULT_CAPACITY + ContainerConstants.FORTY_HI_TOLERANCE)
+            ).ToList();
+            foreach (var singleContainerLot
+                in singleContainerLots)
+            {
+                Container<ClpItem> c = new Container<ClpItem>("40HI");
+                c.Items.AddRange(singleContainerLot.Item);
+                if (destContainers.ContainsKey(destination.Key))
+                {
+                    destContainers[destination.Key].Add(c);
+                }
+                else
+                {
+                    destContainers.Add(destination.Key, new List<Container<ClpItem>>() { c });
+                }
+            }
+            lotGroups.RemoveAll(a => singleContainerLots.Contains(a));
         }
     }
 }

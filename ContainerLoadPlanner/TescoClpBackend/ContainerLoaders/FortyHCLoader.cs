@@ -22,6 +22,7 @@ namespace TescoClpBackend.ContainerLoaders
                 if (combination.FortyHITolerance > 0)
                 {
                     container.MaxCapacity = combination.FortyHITolerance + ContainerConstants.FORTY_HI_DEFAULT_CAPACITY;//ContainerConstants._40HIDefaultCapacity;
+                  
                 }
                 else
                 {
@@ -30,6 +31,7 @@ namespace TescoClpBackend.ContainerLoaders
                 }
 
                 container.RemainingCapacity = container.MaxCapacity;
+                container.MinAccepatableVolume = ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME;
                 containers.Push(container);
             }
             return containers;
@@ -56,6 +58,7 @@ namespace TescoClpBackend.ContainerLoaders
                     container.MaxCapacity = ContainerConstants.FORTY_STD_DEFAULT_CAPACITY+bufferCap;// ContainerConstants._40DRYDefaultCapacity + 1;
                 }
                 container.RemainingCapacity = container.MaxCapacity;
+                container.MinAccepatableVolume = ContainerConstants.FORTY_STD_MIN_ACCEPTABLE_VOLUME;
                 containers.Push(container);
             }
             return containers;
@@ -65,7 +68,7 @@ namespace TescoClpBackend.ContainerLoaders
 
 
     }
-    public class MixedLoader : IContainerLoader
+    public class MixedLoader : ContainerLoader,IContainerLoader
     {
         private FortyHCLoader FortyHCLoader { get; set; }
         private FortySTDLoader FortySTDLoader { get; set; }
@@ -85,6 +88,11 @@ namespace TescoClpBackend.ContainerLoaders
 
             containers.AddRange(this.FortySTDLoader.Load(combination, ref data));
             return containers;
+        }
+
+        protected override Stack<Container<ClpItem>> InitiateContainers(Combination combination)
+        {
+            return null;
         }
     }
 }
