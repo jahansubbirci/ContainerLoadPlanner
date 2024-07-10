@@ -90,10 +90,11 @@
                 </StackPanel>
 
                 <local:ExcelLoader
-                   Title="CFS REPORT"
-                    FileNameHint="CFS Report File"
+                   
+                    Title="CFS REPORT"
+                    FileNameHint="CFS REPORT File"
                     SheetNameHint="CFS Report Sheet"
-                    RangeHint="Range"
+                    RangeHint="CFS Report Range"
                     FilePath="{Binding CfsReport,Mode=TwoWay}"
                     SelectedSheet="{Binding CfsReportSheet,Mode=TwoWay}"
                     Range="{Binding CfsReportRange,Mode=TwoWay}"
@@ -103,6 +104,7 @@
                     Margin="10,0,0,20"
                     BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
                     BorderThickness="1"
+                    x:Name="CfsReporExcelLoader"
                     
                     ></local:ExcelLoader>
                 <local:ExcelLoader
@@ -120,6 +122,7 @@
                     Margin="10,0,0,10"
                     BorderBrush="{DynamicResource MaterialDesign.Brush.Primary.Light}"
                     BorderThickness="2"
+                    x:Name="PoUploadReportExcelLoader"
                     ></local:ExcelLoader>
                 
             </Grid>

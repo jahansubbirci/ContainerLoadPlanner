@@ -5,6 +5,7 @@ using ÉxcelDataExchange.Reader;
 using ÉxcelDataExchange.Writer;
 using NPOI.SS.Formula.Functions;
 using SharedEntities;
+using SharedEntities.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TescoClpBackend;
 using TescoClpBackend.ClpLogics;
+using TescoClpBackend.Models;
 
 namespace ContainerLoadPlanner.Utilities
 {
@@ -20,6 +22,7 @@ namespace ContainerLoadPlanner.Utilities
         public static void AddSharedServices(this SimpleContainer container) {
             container.Singleton<CfsDataRetriever>();
             container.Singleton<PoUploadReportDataLoader>();
+            
 
         }
         public static void AddExcelServices(this SimpleContainer container)
@@ -32,6 +35,11 @@ namespace ContainerLoadPlanner.Utilities
         public static void AddExcelWriterService<T>(this SimpleContainer container)
         {
             container.Singleton<ExcelDataWriter2<T>>();
+            
+        }
+        public static void AddClpReportingService(this SimpleContainer container)  
+        {
+            container.Singleton<ClpReporting<ClpDto>>();
         }
       
     }

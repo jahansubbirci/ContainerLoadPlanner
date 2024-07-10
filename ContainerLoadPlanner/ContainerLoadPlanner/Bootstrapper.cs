@@ -49,8 +49,10 @@ namespace ContainerLoadPlanner
             _container.Singleton<LoggerManager>();
             _container.AddExcelServices();
             _container.AddSharedServices();
+
             _container.AddExcelWriterService<ClpItem>();
             _container.AddTescoServices();
+            _container.AddClpReportingService();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.RegisterPerRequest(typeof(MainViewModel), null, typeof(MainViewModel));
             _container.PerRequest<CartWindowView>();

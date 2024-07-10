@@ -1,0 +1,23 @@
+{
+  "containers":{
+    "40HC": {
+      
+      "default_capacity": 66,
+      "max_tolerance": 2,
+      "min_acceptable": 65,
+      "cost": 1000
+    },
+    "40STD": {
+      "default_capacity": 56,
+      "max_tolerance": 2,
+      "min_acceptable": 55,
+      "cost": 1000
+    },
+    "20STD": {
+      "default_capacity": 26,
+      "max_tolerance": 2,
+      "min_acceptable": 25,
+      "cost": 1000
+    }
+  }
+}

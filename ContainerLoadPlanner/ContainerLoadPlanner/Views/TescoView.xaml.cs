@@ -26,7 +26,7 @@ namespace ContainerLoadPlanner.Views
         {
             
             InitializeComponent();
-            
+         //   CfsReporExcelLoader.Title = "CFS REPORT";
           //  DataContext = this; //new TescoViewModel();
             
         }

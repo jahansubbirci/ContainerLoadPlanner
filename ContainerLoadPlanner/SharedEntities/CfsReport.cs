@@ -56,6 +56,8 @@ namespace SharedEntities
         public string RailNo { get; set; }
         public string InvoiceNo { get; set; }
         public string Id { get; set; }
+        public string Account { get; set; }
+
         public override string ToString()
         {
             return $"{So}\t{Consignee}\t{Shipper}\t{Lot}\t{Pkgs}\t{Qty}\t{Measurement}\t{Cbm}\t{CWeight}\t{Destination}\t{PO}\t{Style}\t{Item}\t";

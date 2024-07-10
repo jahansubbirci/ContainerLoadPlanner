@@ -18,11 +18,14 @@ namespace ContainerLoadPlanner.Views
     /// <summary>
     /// Interaction logic for CartView.xaml
     /// </summary>
-    public partial class CartView : UserControl
+    public partial class CartView : Window
     {
         public CartView()
         {
             InitializeComponent();
+            this.Title = "Container Cart";
+            this.WindowState= System.Windows.WindowState.Maximized;
+            this.UpdateLayout();
         }
     }
 }
