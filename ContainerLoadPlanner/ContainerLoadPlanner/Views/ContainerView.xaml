@@ -27,19 +27,30 @@
                                              Margin="10"></md:PackIcon>
                                 <TextBlock Text="{Binding TotalCbm}" Foreground="SteelBlue"
                                            HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
                                            Margin="100,0,0,0"></TextBlock>
                             <TextBlock
-                                Text="CBM" Foreground="SteelBlue"
-                                           HorizontalAlignment="Left"
+                                Text="CBM" 
+                                Foreground="SteelBlue"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
                                            Margin="200,0,0,0"></TextBlock>
                             
                         </Grid>
                         <StackPanel HorizontalAlignment="Right"
                                     Orientation="Horizontal"
                                     Margin="40,0,0,0">
-                                <Button  Click="Button_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Background="Transparent">
+                                <Button  x:Name="DetailsButton"
+                                    Click="DetailsButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Background="Transparent"
+                                         Visibility="Visible">
                                     <md:PackIcon Kind="Details" Foreground="SteelBlue"/>
                                 </Button>
+                                <Button  x:Name="SummaryButton"
+                                    Click="SummaryButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Background="Transparent"
+                                         >
+                                    <md:PackIcon Kind="TriangleOutline" Foreground="SteelBlue"/>
+                                </Button>
+
                                 <Button HorizontalAlignment="Right"
                                     Background="Transparent"
                                     Foreground="SteelBlue"
@@ -49,16 +60,26 @@
                         </StackPanel>
                         </StackPanel>
                     </md:Card>
+                    <ScrollViewer Background="AliceBlue"
+                        VerticalScrollBarVisibility="Visible"
+                                  HorizontalScrollBarVisibility="Auto">
+                        <StackPanel>
                 <DataGrid ItemsSource="{Binding Items}"
                           AutoGenerateColumns="True"
                           Style="{DynamicResource MaterialDesignDataGrid}"
                           Visibility="Collapsed"
-                          x:Name="dataGrid">
+                          x:Name="dataGrid"
+                          CanUserAddRows="False"
+                          AutoGeneratingColumn="dataGrid_AutoGeneratingColumn">
 
                         <DataGrid.Columns>
                             
                         </DataGrid.Columns>
                     </DataGrid>
+                        </StackPanel>
+                    
+                    </ScrollViewer>
+                    
                 </StackPanel>
               
             </Grid>

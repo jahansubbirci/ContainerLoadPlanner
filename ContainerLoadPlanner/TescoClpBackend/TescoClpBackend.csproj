@@ -51,6 +51,7 @@
     <Compile Include="ContainerLoaders\IContainerLoader.cs" />
     <Compile Include="ContainerLoaders\FortyHCLoader.cs" />
     <Compile Include="DateHelper.cs" />
+    <Compile Include="Models\ClpDto.cs" />
     <Compile Include="Models\Container.cs" />
     <Compile Include="Models\LotItem.cs" />
     <Compile Include="Models\PoUploadReportItem.cs" />
@@ -72,6 +73,9 @@
       <Project>{1ae44d72-e65a-4a80-be35-9060fadeced6}</Project>
       <Name>SharedEntities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

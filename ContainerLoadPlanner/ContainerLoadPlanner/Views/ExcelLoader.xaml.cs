@@ -63,7 +63,7 @@ namespace ContainerLoadPlanner.Views
             get { return (string)this.GetValue(TitleProperty); }
             set { this.SetValue(TitleProperty, value); }
         }
-        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(string));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(ExcelLoader), new PropertyMetadata(string.Empty));
 
 
         public string FileNameHint
@@ -90,11 +90,17 @@ namespace ContainerLoadPlanner.Views
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Excel|*.xls;*.xlsx";
-            if ((bool)openFileDialog.ShowDialog())
+            try
             {
-                FilePathTextBox.Text = openFileDialog.FileName;
-                var sheets = GetExcelSheetNames(openFileDialog.FileName);
-                SheetNameCombo.ItemsSource = sheets;
+                if ((bool)openFileDialog.ShowDialog())
+                {
+                    FilePathTextBox.Text = openFileDialog.FileName;
+                    var sheets = GetExcelSheetNames(openFileDialog.FileName);
+                    SheetNameCombo.ItemsSource = sheets;
+                }
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
         public List<string> GetExcelSheetNames(string fileName)

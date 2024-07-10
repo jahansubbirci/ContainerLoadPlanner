@@ -37,7 +37,7 @@
                 Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                 Width="350"
                 BorderBrush="{DynamicResource BorderBrush}"
-                md:HintAssist.Hint="{Binding FileNameHint}"
+                md:HintAssist.Hint="{Binding FileNameHint,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
                 md:HintAssist.IsFloating="True"
                 md:HintAssist.FloatingScale="1.4"
                 md:HintAssist.Background="{DynamicResource GradientBackground}"
@@ -58,15 +58,17 @@
                  ></Button>
             </StackPanel>
             <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 Margin="10,20,0,0">
                 <ComboBox
                     HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
                     Width="350"
-                    Margin="-135,0,0,0"
+                    Margin="-105,0,0,0"
                     Style="{DynamicResource MaterialDesignOutlinedComboBox}"
                     BorderBrush="{DynamicResource BorderBrush}"
-                    md:HintAssist.Hint="{Binding SheetNameHint}"
+                    md:HintAssist.Hint="{Binding SheetNameHint,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
                     md:HintAssist.IsFloating="True"
                     md:HintAssist.FloatingScale="1.4"
                     md:HintAssist.Background="{DynamicResource GradientBackground}"
@@ -76,19 +78,26 @@
                     x:Name="SheetNameCombo"
                     SelectedItem="{Binding SelectedSheet,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
                     ></ComboBox>
+                <md:PackIcon Kind="AboutCircleOutline"
+                             Foreground="White"
+                             
+                             VerticalAlignment="Center"
+                             Margin="10"
+                             ToolTip="Excel Worksheet"></md:PackIcon>
                 
                 
             </StackPanel>
             <StackPanel
+                Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 Margin="10,20,0,20">
                 <TextBox
                     Style="{DynamicResource MaterialDesignOutlinedTextBox}"
                     HorizontalAlignment="Center"
                     Width="350"
-                    Margin="-135,0,0,0"
+                    Margin="-105,0,0,0"
                     BorderBrush="{DynamicResource BorderBrush}"
-                    md:HintAssist.Hint="{Binding RangeHint}"
+                    md:HintAssist.Hint="{Binding RangeHint,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
                                     md:HintAssist.IsFloating="True"
 md:HintAssist.FloatingScale="1.4"
 md:HintAssist.Background="{DynamicResource GradientBackground}"
@@ -98,6 +107,12 @@ md:HintAssist.HintOpacity="1"
                     x:Name="RangeTextBox"
                     Text="{Binding Range,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"
                     ></TextBox>
+                <md:PackIcon Kind="AboutCircleOutline"
+             Foreground="White"
+             
+             VerticalAlignment="Center"
+             Margin="10"
+             ToolTip="Excel Data Range (e.g. A1:AZ)"></md:PackIcon>
             </StackPanel>
         </StackPanel>
     </Grid>

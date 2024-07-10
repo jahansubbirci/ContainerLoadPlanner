@@ -12,19 +12,6 @@ namespace TescoClpBackend.ClpLogics
     {
         public CfsReport CfsReportItem { get; set; }
         public PoUploadReportItem PoUploadReportItem { get; set; }
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-            if (CfsReportItem != null)
-            {
-                sb.Append(CfsReportItem.ToString());
-
-            }
-            if (PoUploadReportItem != null)
-            {
-                sb.Append(PoUploadReportItem.ToString());
-            }
-            return sb.ToString();
-        }
+       
     }
 }

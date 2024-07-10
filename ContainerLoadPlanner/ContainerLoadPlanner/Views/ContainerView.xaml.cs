@@ -29,5 +29,26 @@ namespace ContainerLoadPlanner.Views
         {
             dataGrid.Visibility = Visibility.Visible;
         }
+
+        private void SummaryButton_Click(object sender, RoutedEventArgs e)
+        {
+            dataGrid.Visibility = Visibility.Collapsed;
+            SummaryButton.Visibility = Visibility.Collapsed;
+            DetailsButton.Visibility = Visibility.Visible;
+        }
+
+        private void DetailsButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+            dataGrid.Visibility = Visibility.Visible;
+            DetailsButton.Visibility = Visibility.Collapsed;
+            SummaryButton.Visibility = Visibility.Visible;
+            
+        }
+
+        private void dataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            e.Column.Width = DataGridLength.Auto;
+        }
     }
 }
