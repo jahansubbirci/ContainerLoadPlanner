@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ContainerLoadPlanner.ViewModels
 {
-    public class ClientViewModel : Screen
+    public class ClientViewModel : Conductor<Screen>
     {
 
         public ClientViewModel(SimpleContainer container)

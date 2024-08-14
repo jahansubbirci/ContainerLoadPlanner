@@ -37,7 +37,7 @@ namespace TescoClpBackend.ContainerLoaders
                 //If Lot Contains one high priority PO, all PO should be high priority
                 lotGroup.ForEach(a =>
                 {
-                    if (a.Item.Any(item => item.PoUploadReportItem.Priority == Int32.MaxValue))
+                    if (a.Item.Any(item => item.PoUploadReportItem.Priority>0))
                     {
                         a.Priority = Int32.MaxValue;
                     }

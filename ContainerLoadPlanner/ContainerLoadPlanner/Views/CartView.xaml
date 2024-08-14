@@ -7,7 +7,16 @@
              mc:Ignorable="d" 
            xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="450" d:DesignWidth="800" WindowState="Maximized">
-    <Grid>
+    <Grid
+        Background="{DynamicResource GradientBackground}">
+        
+            <Image Source="/Resources/logo.png"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Width="100"
+                   Margin="10"></Image>
+        
+        
         <Grid
             HorizontalAlignment="Left"
             VerticalAlignment="Stretch"
@@ -32,26 +41,33 @@
         <Grid
             HorizontalAlignment="Stretch"
             Margin="250,10,100,10"
+            
             Background="LightBlue"
              >
             <ScrollViewer
                 Style="{DynamicResource MaterialDesignScrollViewer}"
                  BorderThickness="1"
+                md:ScrollBarAssist.ButtonsVisibility="Visible"
+                md:ScrollViewerAssist.CornerRectangleVisibility="Visible"
+                
                 BorderBrush="{DynamicResource BorderBrush}"
                 VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                 <Grid x:Name="myPanel"
                       Margin="10,0,10,0">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" 
-                                  Style="{DynamicResource MaterialDesignScrollViewer}"
+                                  HorizontalScrollBarVisibility="Visible"
                                   BorderThickness="1"
+                                  CanContentScroll="True"
+                                  
                                   BorderBrush="{DynamicResource BorderBrush}"
                                   Height="{Binding ElementName=mypanel, Path=ActualHeight}"
                                   >
                 <ItemsControl x:Name="SelectedContainers"
-                          Margin="10,0,10,0"
-                              
-                        
-                              HorizontalAlignment="Stretch">
+                              Margin="10,0,10,0"
+                              HorizontalAlignment="Stretch"
+                              ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              md:ScrollViewerAssist.ShowSeparators="True"
+                              ScrollViewer.CanContentScroll="True">
                         
                     <ItemsControl.ItemTemplate>
 

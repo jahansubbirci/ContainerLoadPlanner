@@ -16,12 +16,20 @@
             Height="auto"
             Background="{DynamicResource GradientBackground}">
             <Grid Height="120">
+                <Image
+                    Source="/Resources/logo.png"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left"
+                    Width="120"
+                    Margin="10"
+                    />
                 <TextBlock 
                     Text="{DynamicResource AppTitle}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Margin="0,10,0,0"
                     Foreground="White"
+                    FontWeight="Bold"
                     FontFamily="Courier New"
                     FontSize="15"></TextBlock>
                 <StackPanel Orientation="Horizontal"
@@ -66,7 +74,7 @@
                     ToolTip="Proceed"
                     x:Name="LoadClpProcessor"
                     >
-                    <md:PackIcon Kind="GreaterThan"
+                    <md:PackIcon Kind="PlayOutline"
                                  Foreground="Black"
                                  ></md:PackIcon>
                 </Button>

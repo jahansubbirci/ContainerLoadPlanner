@@ -24,7 +24,7 @@
      Margin="-160,0,0,0"
             Width="auto"
       HorizontalAlignment="Center" VerticalAlignment="Top" 
-      Height="30"  Text="{Binding Title}" Foreground="White" 
+      Height="30"  Text="{Binding Title,RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}" Foreground="White" 
                          
       FontFamily="Maersk Headline" FontSize="20"  AutomationProperties.AccessKey="TitleKey"
       ></TextBlock>

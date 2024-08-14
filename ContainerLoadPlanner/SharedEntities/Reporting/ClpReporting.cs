@@ -1,4 +1,5 @@
-﻿using ExcelWriterNetFramework;
+﻿using ÉxcelDataExchange;
+using ÉxcelDataExchange.Writer;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace SharedEntities.Reporting
                 {
 
                     CreateHeader(ref i);
+                    
                     foreach (var item in container.Items)
                     {
                         CreateData(item, ref i);

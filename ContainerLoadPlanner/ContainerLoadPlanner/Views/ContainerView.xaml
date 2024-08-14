@@ -17,14 +17,16 @@
                         Margin="15"
                         Background="White"
                         >
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Stretch">
 
                         <Grid  HorizontalAlignment="Left">
                             
                                 <md:PackIcon Kind="TrainCarContainer"
                                              Foreground="SteelBlue"
                                              HorizontalAlignment="Left"
-                                             Margin="10"></md:PackIcon>
+                                             VerticalAlignment="Center"
+                                             Margin="40,10,10,10"></md:PackIcon>
                                 <TextBlock Text="{Binding TotalCbm}" Foreground="SteelBlue"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Center"
@@ -43,7 +45,7 @@
                                 <Button  x:Name="DetailsButton"
                                     Click="DetailsButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Background="Transparent"
                                          Visibility="Visible">
-                                    <md:PackIcon Kind="Details" Foreground="SteelBlue"/>
+                                    <md:PackIcon Kind="TriangleDownOutline" Foreground="SteelBlue"/>
                                 </Button>
                                 <Button  x:Name="SummaryButton"
                                     Click="SummaryButton_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Background="Transparent"
@@ -55,14 +57,12 @@
                                     Background="Transparent"
                                     Foreground="SteelBlue"
                                     Margin="10">
-                                    <md:PackIcon Kind="TrashCan"/>
+                                    <md:PackIcon Kind="TrashCanOutline"/>
                                 </Button>
                         </StackPanel>
                         </StackPanel>
                     </md:Card>
-                    <ScrollViewer Background="AliceBlue"
-                        VerticalScrollBarVisibility="Visible"
-                                  HorizontalScrollBarVisibility="Auto">
+                    
                         <StackPanel>
                 <DataGrid ItemsSource="{Binding Items}"
                           AutoGenerateColumns="True"
@@ -70,6 +70,8 @@
                           Visibility="Collapsed"
                           x:Name="dataGrid"
                           CanUserAddRows="False"
+                          CellStyle="{DynamicResource MaterialDesignDataGridCell}"
+                          RowStyle="{DynamicResource MaterialDesignDataGridRow}"
                           AutoGeneratingColumn="dataGrid_AutoGeneratingColumn">
 
                         <DataGrid.Columns>
@@ -78,7 +80,7 @@
                     </DataGrid>
                         </StackPanel>
                     
-                    </ScrollViewer>
+                  
                     
                 </StackPanel>
               

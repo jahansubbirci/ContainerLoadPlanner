@@ -72,21 +72,44 @@
                     </StackPanel>
 
                 <StackPanel
+                    
+                    Orientation="Horizontal"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
                     Grid.Column="1"
                     Grid.Row="1"
+                    
                     >
-                   
-                    <CheckBox
-                        Content="CUT OFF"
-                        Width="100"
-                        Height="100"
-                        x:Name="CutOff"
-                        Background="{DynamicResource MaterialDesignDarkSeparatorBackground}"
-                        BorderBrush="{DynamicResource BorderBrush}"
-                        Style="{DynamicResource MaterialDesignActionToggleButton}"
-                        ></CheckBox>
+
+                        <CheckBox 
+                            Content="Ignore PO Without Docs"
+                            Foreground="White"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}"
+                            Margin="5"
+                            IsChecked="{Binding IgnorePoWithoutDocs, Mode=TwoWay}" />
+                        <CheckBox 
+                            Content="Cut Off"
+                            Foreground="White"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}"
+                            Margin="5"
+                            IsChecked="{Binding IsCutOff, Mode=TwoWay}" />
+                        <CheckBox
+                            Visibility="Collapsed"
+                            Content="Plan POs in Covered VAN Separately"
+                            Foreground="White"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}"
+                            Margin="5"
+                            IsChecked="{Binding PlanCVPoSeperately, Mode=TwoWay}" />
+
+                       
+                    
+                       
                 </StackPanel>
 
                 <local:ExcelLoader

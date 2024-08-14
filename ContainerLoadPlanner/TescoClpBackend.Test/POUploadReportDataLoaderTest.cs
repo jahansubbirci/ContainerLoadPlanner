@@ -26,7 +26,7 @@ namespace TescoClpBackend.Test
         public void GetPoReport_ShouldThrowIOException_WhenFileIsOpened()
         {
 
-            Assert.ThrowsException<IOException>(()=>poUploadReportDataLoader.GetPoReport(poReportFileName));
+            Assert.ThrowsException<IOException>(()=>poUploadReportDataLoader.GetPoReport(poReportFileName, null, null));
            // Assert.ThrowsException<IndexOutOfRangeException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName));
         }
         [TestMethod]
@@ -34,13 +34,13 @@ namespace TescoClpBackend.Test
         {
 
             //Assert.ThrowsException<IOException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName));
-            Assert.ThrowsException<ArgumentException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName));
+            Assert.ThrowsException<ArgumentException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName, null, null));
         }
         [TestMethod]
         public void GetPoReport_ShouldReturnList()
         {
 
-            var report=poUploadReportDataLoader.GetPoReport(poReportFileName);
+            var report=poUploadReportDataLoader.GetPoReport(poReportFileName, null, null);
             //Assert.ThrowsException<IOException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName));
             //Assert.ThrowsException<ArgumentException>(() => poUploadReportDataLoader.GetPoReport(poReportFileName));
         }

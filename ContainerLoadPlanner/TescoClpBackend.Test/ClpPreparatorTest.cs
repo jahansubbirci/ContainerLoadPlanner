@@ -26,7 +26,8 @@ namespace TescoClpBackend.Test
         [TestInitialize]
         public void Init()
         {
-            excelDataReader = new ExcelDataReader();
+            
+            excelDataReader = new ExcelDataReader(null);
             poUploadReportDataLoader = new PoUploadReportDataLoader(excelDataReader, null);
             cfsDataRetriever = new CfsDataRetriever(excelDataReader);
             fortyHCLoader = new FortyHCLoader();
@@ -40,7 +41,7 @@ namespace TescoClpBackend.Test
         {
             //Arrange
             var poDataTask = Task.Run(() =>
-            poUploadReportDataLoader.GetPoReport(poReportFileName)
+            poUploadReportDataLoader.GetPoReport(poReportFileName,null,null)
             );
             var cfsDataTask = Task.Run(() =>
             cfsDataRetriever.GetCfsData(cfsReportFileName, "Total Raw", "A1:BZ", CFS.SAPL)
@@ -52,7 +53,8 @@ namespace TescoClpBackend.Test
             clpPreparator = new ClpPreparator(combinator, fortyHCLoader,null);
 
             //Act
-            var containers = clpPreparator.Create(cfsData, poData, false);
+            
+            var containers = clpPreparator.Create(cfsData, poData, null);
 
             //Assert
             Assert.IsTrue(containers.Count >= 4);
@@ -63,7 +65,7 @@ namespace TescoClpBackend.Test
         {
             //Arrange
             var poDataTask = Task.Run(() =>
-            poUploadReportDataLoader.GetPoReport(poReportFileName)
+            poUploadReportDataLoader.GetPoReport(poReportFileName,null,null)
             );
             var cfsDataTask = Task.Run(() =>
             cfsDataRetriever.GetCfsData(cfsReportFileName, "Total Raw", "A1:BZ", CFS.SAPL)
@@ -76,7 +78,7 @@ namespace TescoClpBackend.Test
             clpPreparator = new ClpPreparator(combinator, new MixedLoader(fortyHCLoader, fortySTDLoader),null);
 
             //Act
-            var containers=clpPreparator.Create(cfsData, poData, isCutOff);
+            var containers=clpPreparator.Create(cfsData, poData, null);
 
             //Assert
             var values=containers.Values.ToList();

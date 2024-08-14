@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using ExcelDataExchange.Reader;
 using ÉxcelDataExchange.Writer;
+using LoggerService;
 using Microsoft.Win32;
 using SharedEntities;
 using SharedEntities.Reporting;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using TescoClpBackend;
@@ -27,6 +29,7 @@ namespace ContainerLoadPlanner.ViewModels
         private readonly ClpReporting<ClpDto> clpReporting;
         private readonly SimpleContainer container;
         private readonly Reporting reportingService;
+        private readonly ILoggerManager loggerManager;
 
         public TescoViewModel(SimpleContainer container) : base(container)
         {
@@ -40,11 +43,56 @@ namespace ContainerLoadPlanner.ViewModels
 
             reportingService = container.GetInstance<Reporting>();
             clpReporting = container.GetInstance<ClpReporting<ClpDto>>();
+            _settings = new ClpEngineSettings();
+            loggerManager=container.GetInstance<ILoggerManager>();
         }
 
 
         private string myMaerskReport;
         private bool cutOff;
+         private ClpEngineSettings _settings;
+
+        
+
+
+        public bool IgnorePoWithoutDocs
+        {
+            get => _settings.IgnorePoWithoutDocs;
+            set
+            {
+                if (_settings.IgnorePoWithoutDocs != value)
+                {
+                    _settings.IgnorePoWithoutDocs = value;
+                    NotifyOfPropertyChange(() => IgnorePoWithoutDocs);
+                }
+            }
+        }
+
+        public bool IsCutOff
+        {
+            get => _settings.IsCutOff;
+            set
+            {
+                if (_settings.IsCutOff != value)
+                {
+                    _settings.IsCutOff = value;
+                    NotifyOfPropertyChange(() => IsCutOff);
+                }
+            }
+        }
+
+        public bool PlanCVPoSeperately
+        {
+            get => _settings.PlanCVPoSeperately;
+            set
+            {
+                if (_settings.PlanCVPoSeperately != value)
+                {
+                    _settings.PlanCVPoSeperately = value;
+                    NotifyOfPropertyChange(() => PlanCVPoSeperately);
+                }
+            }
+        }
 
 
 
@@ -135,9 +183,9 @@ namespace ContainerLoadPlanner.ViewModels
                     : container.GetInstance<ClpPreparator>(CombinatorConstants.REGULAR);
 
                 var cfsData = await Task.Run(() => cfsDataRetriever.GetCfsData(this.CfsReport, this.CfsReportSheet, CfsReportRange, SelectedCfs));
-                var poData = await Task.Run(() => poUploadReportDataLoader.GetPoReport(MyMaerskReport));
+                var poData = await Task.Run(() => poUploadReportDataLoader.GetPoReport(MyMaerskReport,this.myMaerskReportSheet,this.MyMaerskReportRange));
                 cfsData = cfsData.Where(a => !a.Measurement.Equals("0X0X0"));
-                var clp = clpPreparator.Create(cfsData, poData, false);
+                var clp = clpPreparator.Create(cfsData, poData, _settings);
                 CartData = clp;
 
                 OpenCartWindow(CartData);
@@ -149,6 +197,7 @@ namespace ContainerLoadPlanner.ViewModels
             }
             catch (Exception ex)
             {
+                loggerManager.LogError(ex, ex.Message);
                 MessageBox.Show(ex.Message);
             }
         }
@@ -185,6 +234,7 @@ namespace ContainerLoadPlanner.ViewModels
             //  _windowManager.ShowWindowAsync(new CartWindowViewModel<ClpItem>(dataToPass));
 
             _windowManager.ShowWindowAsync(new CartViewModel<ClpDto>(transformedDataToPass), null, new Dictionary<string, object> { { "WindowState", WindowState.Minimized } });
+            DeactivateItemAsync(this,false,CancellationToken.None);
         }
 
         public Dictionary<string, List<Container<ClpDto>>> TransformData(Dictionary<string, List<Container<ClpItem>>> dataToPass)

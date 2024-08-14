@@ -23,10 +23,9 @@ namespace TescoClpBackend
             this.loggerManager = loggerManager;
         }
         public IEnumerable<PoUploadReportItem> GetPoReport
-            (string fileName)
+            (string fileName,string sheetName,string range)
         {
-            string sheetName = "TESCO CLP REPORT_aggr";
-            string range = "A1:AZ";
+            
             try
             {
                 var dataTable = excelDataReader

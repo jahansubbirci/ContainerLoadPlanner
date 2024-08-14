@@ -30,10 +30,15 @@ namespace TescoClpBackend.ClpLogics
         }
         public Dictionary<string, List<Container<ClpItem>>> Create(IEnumerable<CfsReport> cfsReport,
             IEnumerable<PoUploadReportItem> poUploadReport,
-            bool isCutOff)
+            ClpEngineSettings settings)
         {
 
             //Remove BDDAC
+            if ((bool)settings.IgnorePoWithoutDocs)
+            {
+                cfsReport = cfsReport.Where(a => a.RecvDoc != DateTime.MinValue);
+            }
+            bool isCutOff = (bool)settings.IsCutOff;
 
             var airShipmentPo = poUploadReport
                 .Where(a => a.TransportationMode == TransportationMode.BDDAC)
@@ -46,9 +51,13 @@ namespace TescoClpBackend.ClpLogics
                 .ToList();
             poUploadList.ForEach(a =>
             {
-                if (a.EHD.Equals(DateHelper.GetClosestPastEHD(DateTime.Today, ConfigurationConstant.EHD)))
+                if (a.EHD < DateHelper.GetClosestPastEHD(DateTime.Today, ConfigurationConstant.EHD))
                 {
                     a.Priority = Int32.MaxValue;
+                }
+                if (a.EHD.Equals(DateHelper.GetClosestPastEHD(DateTime.Today, ConfigurationConstant.EHD)))
+                {
+                    a.Priority = Int32.MaxValue - 1;
                 }
             });
 
@@ -63,21 +72,33 @@ namespace TescoClpBackend.ClpLogics
 
 
             var destinationGroup = clpData.GroupBy(a => a.CfsReportItem.Destination);
-            return CreateDestinationWiseClp(destinationGroup, isCutOff);
+
+            return CreateDestinationWiseClp(destinationGroup, settings);
         }
 
-        private Dictionary<string, List<Container<ClpItem>>> CreateDestinationWiseClp(IEnumerable<IGrouping<string, ClpItem>> destinationGroup, bool isCutOff)
+        private Dictionary<string, List<Container<ClpItem>>> CreateDestinationWiseClp(IEnumerable<IGrouping<string, ClpItem>> destinationGroup, ClpEngineSettings settings)
         {
             Dictionary<string, List<Container<ClpItem>>> destContainers = new Dictionary<string, List<Container<ClpItem>>>();
             foreach (var destination in destinationGroup)
             {
-                var destItems = destination.ToList();
+                List<ClpItem> cartonOnVan = new List<ClpItem>();
+                List<ClpItem> cartonOnFloor = destination.ToList();
+                if (settings.PlanCVPoSeperately)
+                {
+                    cartonOnVan = destination
+                        .Where(a => a.CfsReportItem.Loc.Equals("cv", StringComparison.InvariantCultureIgnoreCase))
+                        .ToList();
+                    cartonOnFloor = destination.Except(cartonOnVan)
+                        .ToList();
+                }
+                var destItems = cartonOnFloor.ToList();
+
 
 
                 var lotGroups = destItems.GroupBy(a => a.CfsReportItem.Lot).Select(lot => new LotItem(lot)).ToList();
                 lotGroups.ForEach(a =>
                 {
-                    if (a.Item.Any(i => i.PoUploadReportItem.Priority == Int32.MaxValue))
+                    if (a.Item.Any(i => i.PoUploadReportItem.Priority > 0))
                     {
                         a.Priority = Int32.MaxValue;
                     }
@@ -131,7 +152,7 @@ namespace TescoClpBackend.ClpLogics
                         .Where(a =>
                         a.Items.Sum(i => i.CfsReportItem.Cbm) < ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME)
                         .ToList();
-                    
+
                     LogLeftoverItems(nonPriorityGroup);
 
 
@@ -148,7 +169,7 @@ namespace TescoClpBackend.ClpLogics
 
                     containers = containerLoader.Load(combination, ref destItems);
 
-                    
+
                     LogLeftoverItems(destItems);
                 }
 
@@ -165,16 +186,30 @@ namespace TescoClpBackend.ClpLogics
                 }
 
                 destContainers[destination.Key].ForEach(a => a.UsedCbm = a.Items.Sum(i => i.CfsReportItem.Cbm));
-                 var c = destContainers[destination.Key]
-                    .Where(a => a.UsedCbm < a.MinAccepatableVolume)
-                    .ToList();
+                var c = destContainers[destination.Key]
+                   .Where(a => a.UsedCbm < a.MinAccepatableVolume)
+                   .ToList();
                 c.ForEach(a => a.Items.ForEach(i => loggerManager.LogInfo($"\tLeft Over:\t{i.CfsReportItem.ToString()}")));
+
                 destContainers[destination.Key].RemoveAll(a => a.UsedCbm < a.MinAccepatableVolume);
+
             }
+            SortContainers(ref destContainers);
             return destContainers;
         }
 
-
+        private void SortContainers(ref Dictionary<string, List<Container<ClpItem>>> destContainers)
+        {
+            foreach (var destination in destContainers)
+            {
+                var containers=destination.Value;
+                foreach (Container<ClpItem> container in containers)
+                {
+                   var items= container.Items.OrderByDescending(a=>a.CfsReportItem.Lot);
+                    container.Items = items.ToList();
+                }
+            }
+        }
 
         private void LoadMoreThanContainerLots(Dictionary<string, List<Container<ClpItem>>> destContainers, IGrouping<string, ClpItem> destination, ref List<LotItem> lotGroups)
         {
@@ -202,7 +237,7 @@ namespace TescoClpBackend.ClpLogics
                     .First(a => a.Key == clone.Item.Key);
                 if (remainingItem != null)
                 {
-                    
+
                     var l = new LotItem(remainingItem);
                     lotGroups.Add(l);
                 }
@@ -243,7 +278,8 @@ namespace TescoClpBackend.ClpLogics
             }
             lotGroups.RemoveAll(a => singleContainerLots.Contains(a));
         }
-        private void LogLeftoverItems(List<ClpItem> items) {
+        private void LogLeftoverItems(List<ClpItem> items)
+        {
 
             items.ForEach(a => loggerManager.LogInfo($"\tLeft over:\t{a.CfsReportItem.ToString()}"));
         }
