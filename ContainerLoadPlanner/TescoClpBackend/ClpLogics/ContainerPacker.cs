@@ -171,31 +171,59 @@ namespace TescoClpBackend.ClpLogics
                         break;
 
                     // Move items from overfilled to underfilled containers
-                    var movableLotItems = overfilledContainer.Items
-                .GroupBy(item => item.CfsReportItem.Lot) // or some other meaningful property
-                .Where(group => group.Sum(item => item.Cbm) + underfilledContainer.UsedCbm <= underfilledContainer.MaxCapacity)
-                .OrderByDescending(group => group.Sum(item => item.Cbm))
-                .Select(lot => new LotItem(lot))
+                    var movableLotItems =
+                        overfilledContainer.Items
+                        .GroupBy(item => item.CfsReportItem.Lot)
+                .Where(group => overfilledContainer.UsedCbm - group.Sum(a => a.Cbm) >= overfilledContainer.MinAcceptableVolume &&
+                               underfilledContainer.UsedCbm + group.Sum(a => a.Cbm) <= underfilledContainer.MaxCapacity)
+                .OrderByDescending(group => group.Sum(a => a.Cbm))
+                .Select(lot =>new LotItem(lot))
                 .ToList();
 
-                    foreach (var lotItemGroup in movableLotItems)
+                    //    overfilledContainer.Items
+                    //.GroupBy(item => item.CfsReportItem.Lot) // or some other meaningful property
+                    //.Where(group => group.Sum(item => item.Cbm) + underfilledContainer.UsedCbm <= underfilledContainer.MaxCapacity)
+                    //.OrderByDescending(group => group.Sum(item => item.Cbm))
+                    //.Select(lot => new LotItem(lot))
+                    //.ToList();
+
+                    foreach (var lotItemToMove in movableLotItems)
                     {
-                        var lotItemsToMove = lotItemGroup.Item;
-
-                        // Remove items from the overfilled container
-
-                        overfilledContainer.RemoveItems(lotItemsToMove);
-                        overfilledContainer.UsedCbm -= lotItemsToMove.Sum(a => a.Cbm);
-
-                        // Add items to the underfilled container
-                        if (underfilledContainer.CanAddItems(lotItemsToMove))
-                        {
-                            underfilledContainer.AddItems(lotItemsToMove);
-                        }
-
-                        if (underfilledContainer.UsedCbm >= underfilledContainer.MinAcceptableVolume)
+                        if(underfilledContainer.UsedCbm>=underfilledContainer.MinAcceptableVolume)
                             break;
+
+                        overfilledContainer.RemoveItems(lotItemToMove.Item);
+                        overfilledContainer.UsedCbm -= lotItemToMove.Cbm;
+
+                        if(underfilledContainer.CanAddItems(lotItemToMove.Item)){
+
+                            underfilledContainer.AddItems(lotItemToMove.Item);
+                            underfilledContainer.UsedCbm += lotItemToMove.TotalCbm;
+                        }
+                        if (overfilledContainer.UsedCbm <= overfilledContainer.MaxCapacity && underfilledContainer.UsedCbm >= underfilledContainer.MinAcceptableVolume)
+                        {
+                            break; // Move to the next underfilled container
+                        }
                     }
+
+                    //foreach (var lotItemGroup in movableLotItems)
+                    //{
+                    //    var lotItemsToMove = lotItemGroup.Item;
+
+                    //    // Remove items from the overfilled container
+
+                    //    overfilledContainer.RemoveItems(lotItemsToMove);
+                    //    overfilledContainer.UsedCbm -= lotItemsToMove.Sum(a => a.Cbm);
+
+                    //    // Add items to the underfilled container
+                    //    if (underfilledContainer.CanAddItems(lotItemsToMove))
+                    //    {
+                    //        underfilledContainer.AddItems(lotItemsToMove);
+                    //    }
+
+                    //    if (underfilledContainer.UsedCbm >= underfilledContainer.MinAcceptableVolume)
+                    //        break;
+                    //}
                 }
             }
 
@@ -204,7 +232,7 @@ namespace TescoClpBackend.ClpLogics
             {
                 if (container.UsedCbm < container.MinAcceptableVolume)
                 {
-
+                    loggerManager.LogWarn($"Container {container.ContainerId} still underutilized. Used CBM:{container.UsedCbm}");
                     //throw new InvalidOperationException($"Container {container.Label} still does not meet the minimum capacity requirement after redistribution.");
                 }
             }
