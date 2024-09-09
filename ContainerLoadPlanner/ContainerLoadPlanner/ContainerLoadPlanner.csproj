@@ -180,6 +180,9 @@
     <Compile Include="Views\ClientView.xaml.cs">
       <DependentUpon>ClientView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ContainerPropertyView.xaml.cs">
+      <DependentUpon>ContainerPropertyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ContainerView.xaml.cs">
       <DependentUpon>ContainerView.xaml</DependentUpon>
     </Compile>
@@ -261,6 +264,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ContainerPropertyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ContainerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -286,6 +293,10 @@
     <ProjectReference Include="..\..\..\ÉxcelDataExchange\ExcelDataExchange.csproj">
       <Project>{564182C6-8609-45DC-A0A6-3D9DF37F2594}</Project>
       <Name>ExcelDataExchange</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClpEngine\ClpEngine.csproj">
+      <Project>{DA509752-6D6C-45B8-A899-0DB41A779F6E}</Project>
+      <Name>ClpEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\LoggerService\LoggerService.csproj">
       <Project>{24E0D7A7-53ED-43A6-A685-27B68A0DF591}</Project>

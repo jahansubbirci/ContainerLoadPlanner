@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ClpEngine;
 using SharedEntities;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using TescoClpBackend.ClpLogics;
 
 namespace ContainerLoadPlanner.ViewModels
 {
-    public class ContainerViewModel<T>:Screen where T:class//GenericViewModel<Container<ClpItem>>
+    public class ContainerViewModel<T>:Screen where T:ContainerItem//GenericViewModel<Container<ClpItem>>
     {
 
         public Container<T> Container { get;  }

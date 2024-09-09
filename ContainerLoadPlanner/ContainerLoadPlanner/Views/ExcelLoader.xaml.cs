@@ -86,7 +86,7 @@ namespace ContainerLoadPlanner.Views
         }
         public static readonly DependencyProperty RangeHintProperty = DependencyProperty.Register("RangeHint", typeof(string), typeof(string));
 
-        private void BrowseFile_Click(object sender, RoutedEventArgs e)
+        private async void BrowseFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Excel|*.xls;*.xlsx";
@@ -95,7 +95,7 @@ namespace ContainerLoadPlanner.Views
                 if ((bool)openFileDialog.ShowDialog())
                 {
                     FilePathTextBox.Text = openFileDialog.FileName;
-                    var sheets = GetExcelSheetNames(openFileDialog.FileName);
+                    var sheets =await Task.Run(()=> GetExcelSheetNames(openFileDialog.FileName));
                     SheetNameCombo.ItemsSource = sheets;
                 }
             }catch(Exception ex)

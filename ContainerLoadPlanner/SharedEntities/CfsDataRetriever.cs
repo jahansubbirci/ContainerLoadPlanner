@@ -56,23 +56,23 @@ namespace SharedEntities
                     cfsReportItem.TpnLc = row["TPN/LC"].ToString();
                     cfsReportItem.RefSize = row["REF/SIZE"].ToString();
                     cfsReportItem.RmsStyle = row["RMS STYLE"].ToString();
-                    cfsReportItem.Category = row["CAT"].ToString();
-                    cfsReportItem.Division = row["DIV"].ToString();
-                    cfsReportItem.Department = row["DEPT"].ToString();
+                    //cfsReportItem.Category = row["CAT"].ToString();
+                    //cfsReportItem.Division = row["DIV"].ToString();
+                    //cfsReportItem.Department = row["DEPT"].ToString();
                     cfsReportItem.SB = row["SB"].ToString();
-                    cfsReportItem.Vat = row["VAT"].ToString();
+                    //cfsReportItem.Vat = row["VAT"].ToString();
                     cfsReportItem.Loc = row["LOC"].ToString();
                     cfsReportItem.Commodity = row["COMMODITY"].ToString();
                     cfsReportItem.Remarks = row["REMARKS"].ToString();
-                    cfsReportItem.Overflow = row["Overflow"].ToString();
+                    //cfsReportItem.Overflow = row["Overflow"].ToString();
                     //cfsReportItem.StuffingHeldupRemarks = row["Stuffing Heldup Remarks"].ToString();
-                    cfsReportItem.Forwarder = row["FORWARDER"].ToString();
+                    //cfsReportItem.Forwarder = row["FORWARDER"].ToString();
                     cfsReportItem.Clr = row["CLR"].ToString();
                     cfsReportItem.Sku = row["SKU"].ToString();
-                    cfsReportItem.StrokeNo = row["STROKE NO."].ToString();
-                    cfsReportItem.RailNo = row["RAIL NO."].ToString();
-                    cfsReportItem.InvoiceNo = row["INVOICE NO"].ToString();
-                    cfsReportItem.Id = row["#ID"].ToString();
+                    //cfsReportItem.StrokeNo = row["STROKE NO."].ToString();
+                    //cfsReportItem.RailNo = row["RAIL NO."].ToString();
+                    //cfsReportItem.InvoiceNo = row["INVOICE NO"].ToString();
+                    //cfsReportItem.Id = row["#ID"].ToString();
                     try
                     {
                         cfsReportItem.Lot = Convert.ToInt32(row["LOT"].ToString().Trim());
@@ -103,26 +103,26 @@ namespace SharedEntities
                         cfsReportItem.RecvDoc = DateTime.MinValue;
                     }
 
-                    if (row["SB DATE"] != DBNull.Value)
-                    {
-                        cfsReportItem.SbDate = DateTime.TryParse(row["SB DATE"].ToString(), out var sbDate) ? sbDate : DateTime.MinValue;
-                    }
-                    else
-                    {
-                        cfsReportItem.SbDate = DateTime.MinValue;
-                    }
+                    //if (row["SB DATE"] != DBNull.Value)
+                    //{
+                    //    cfsReportItem.SbDate = DateTime.TryParse(row["SB DATE"].ToString(), out var sbDate) ? sbDate : DateTime.MinValue;
+                    //}
+                    //else
+                    //{
+                    //    cfsReportItem.SbDate = DateTime.MinValue;
+                    //}
 
-                    if (row["ERD DATE"] != DBNull.Value)
-                    {
-                        cfsReportItem.ErdDate = DateTime.TryParse(row["ERD DATE"].ToString(), out var erd) ? erd : DateTime.MinValue;
-                    }
-                    else
-                    {
-                        cfsReportItem.ErdDate = DateTime.MinValue;
-                    }
+                    //if (row["ERD DATE"] != DBNull.Value)
+                    //{
+                    //    cfsReportItem.ErdDate = DateTime.TryParse(row["ERD DATE"].ToString(), out var erd) ? erd : DateTime.MinValue;
+                    //}
+                    //else
+                    //{
+                    //    cfsReportItem.ErdDate = DateTime.MinValue;
+                    //}
 
-                    cfsReportItem.CustomsHouseCode = (row["CUSTOMS HOUSE CODE"] != DBNull.Value) ? Int32.TryParse(row["CUSTOMS HOUSE CODE"].ToString().Trim(), out var customsCode) ? customsCode : 0 : 0;
-                    cfsReportItem.InvoiceValue = (row["INVOICE VALUE"] != DBNull.Value) ? Double.TryParse(row["INVOICE VALUE"].ToString().Trim(), out var invoiceValue) ? invoiceValue : 0 : 0;
+                 //   cfsReportItem.CustomsHouseCode = (row["CUSTOMS HOUSE CODE"] != DBNull.Value) ? Int32.TryParse(row["CUSTOMS HOUSE CODE"].ToString().Trim(), out var customsCode) ? customsCode : 0 : 0;
+                   // cfsReportItem.InvoiceValue = (row["INVOICE VALUE"] != DBNull.Value) ? Double.TryParse(row["INVOICE VALUE"].ToString().Trim(), out var invoiceValue) ? invoiceValue : 0 : 0;
 
                     #region object initialization
                     //CfsReport cfsReportItem = new CfsReport()

@@ -1,4 +1,5 @@
-﻿using ÉxcelDataExchange;
+﻿using ClpEngine;
+using ÉxcelDataExchange;
 using ÉxcelDataExchange.Writer;
 using NPOI.SS.UserModel;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SharedEntities.Reporting
 {
-    public class ClpReporting<T> : BaseExcelWriter where T : class
+    public class ClpReporting<T> : BaseExcelWriter where T : ContainerItem
     {
         public void CreateReport(string fileName, Dictionary<string, List<Container<T>>> data)
         {
@@ -25,7 +26,7 @@ namespace SharedEntities.Reporting
                 {
 
                     CreateHeader(ref i);
-                    
+
                     foreach (var item in container.Items)
                     {
                         CreateData(item, ref i);
@@ -40,32 +41,33 @@ namespace SharedEntities.Reporting
 
         private void CreateDestinationSummary(List<Container<T>> value)
         {
-            var groups=value.GroupBy(a => a.Label);
+            var groups = value.GroupBy(a => a.Label);
             int i = 2;
             foreach (var label in groups)
             {
                 var row = sheet.CreateRow(i);
-                var cell=row.CreateCell(0);
+                var cell = row.CreateCell(0);
                 cell.SetCellValue($"{label.Count()}X{label.Key}");
             }
         }
 
         private void CreateSummary(ref int i, Container<T> container)
         {
-           var summaryRow=sheet.CreateRow(i);
+            var summaryRow = sheet.CreateRow(i);
             int cellNo = 0;
             foreach (var property in typeof(T).GetProperties())
             {
-                if (IsNumericType(property.PropertyType)){
-                    var sum=GetSumOfDoubleProperties(container.Items, property.Name);
-                    CreateCell(sheet,i, cellNo, sum);
+                if (IsNumericType(property.PropertyType))
+                {
+                    var sum = GetSumOfDoubleProperties(container.Items, property.Name);
+                    CreateCell(sheet, i, cellNo, sum);
                 }
                 cellNo++;
             }
             i++;
         }
 
-        public double GetSumOfDoubleProperties(List<T>items,string name)
+        public double GetSumOfDoubleProperties(List<T> items, string name)
         {
             double sum = 0.0;
 
@@ -81,7 +83,7 @@ namespace SharedEntities.Reporting
                 foreach (PropertyInfo prop in properties)
                 {
                     var value = prop.GetValue(item);
-                    double.TryParse(value.ToString(),out var v);
+                    double.TryParse(value.ToString(), out var v);
                     sum += v;
                 }
             }
@@ -118,6 +120,7 @@ namespace SharedEntities.Reporting
 
             int rowIndex = j;// dataStartingIndex;
             IRow row = sheet.CreateRow(rowIndex);
+            row.HeightInPoints = 40;
             int i = 0;
             foreach (var property in item.GetType().GetProperties())
             {
@@ -127,8 +130,9 @@ namespace SharedEntities.Reporting
                 if (type.Equals(typeof(int)))
                 {
                     cell = row.CreateCell(i, CellType.Numeric);
+                    
+                    cell.SetCellValue(Convert.ToDouble(value));
                     cell.CellStyle = intCellStyle;
-                    cell.SetCellValue(Convert.ToInt32(value));
                 }
                 if (type.Equals(typeof(double)))
                 {
@@ -149,9 +153,35 @@ namespace SharedEntities.Reporting
                     cell.CellStyle = stringCellStyle;
                     cell.SetCellValue(Convert.ToString(value));
                 }
+                
+                
+                Attribute[] attributes = Attribute.GetCustomAttributes(property);
+                if (attributes.Length > 0)
+                {
+                    foreach (Attribute attribute in attributes)
+                    {
+                        //var attribute = attributes[0];
+                        if (attribute is VisibleAttribute)
+                        {
+                            var visible = ((VisibleAttribute)attribute).Visible;
+                            if (!visible)
+                            {
+                                cell.SetCellValue("");
+                            }
+                        }
+                        if (attribute is SpecialBackgroundAttribute)
+                        {
+                            var special = ((SpecialBackgroundAttribute)attribute).SpecialBackground;
+                            if (special)
+                            {
+                                row.RowStyle = SetSpecialCellStyle();
 
+                            }
 
-
+                        }
+                    }
+                }
+                
                 i++;
             }
             j++;
@@ -162,7 +192,7 @@ namespace SharedEntities.Reporting
             var style = SetHeaderCellStyle();
             var row = sheet.CreateRow(j);
             int i = 0;
-            
+
             foreach (var property in typeof(T).GetProperties())
             {
                 ICell cell = row.CreateCell(i, CellType.String);
@@ -175,6 +205,14 @@ namespace SharedEntities.Reporting
                     {
                         var header = ((ColumnHeaderAttribute)attribute).Header;
                         cell.SetCellValue(header);
+                    }
+                    if (attribute is VisibleAttribute)
+                    {
+                        var visible = ((VisibleAttribute)attribute).Visible;
+                        if (!visible)
+                        {
+                            cell.SetCellValue("");
+                        }
                     }
                     else
                     {

@@ -1,4 +1,5 @@
-﻿using SharedEntities;
+﻿using ClpEngine;
+using SharedEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ContainerLoadPlanner.Models
 {
-    public class CartItem<T> where T : class
+    public class CartItem<T> where T : ContainerItem
     {
         public Container<T> Container  { get; set; }
         public ContainerSummary Summary { get; set; }

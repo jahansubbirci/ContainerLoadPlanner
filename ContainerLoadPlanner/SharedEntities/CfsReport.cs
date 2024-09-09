@@ -57,6 +57,7 @@ namespace SharedEntities
         public string InvoiceNo { get; set; }
         public string Id { get; set; }
         public string Account { get; set; }
+        public bool Split { get; set; }
 
         public override string ToString()
         {

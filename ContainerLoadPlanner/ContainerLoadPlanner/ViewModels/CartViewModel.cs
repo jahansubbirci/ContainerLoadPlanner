@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ClpEngine;
 using ContainerLoadPlanner.Models;
 using SharedEntities;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace ContainerLoadPlanner.ViewModels
 {
-    public class CartViewModel<T> : Screen where T : class
+    public class CartViewModel<T> : Screen where T : ContainerItem
     {
         private readonly Dictionary<string, List<Container<T>>> _data;
         private string _selectedDestination;

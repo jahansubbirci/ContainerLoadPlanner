@@ -46,7 +46,7 @@ namespace ContainerLoadPlanner
             _container.Instance(_container);
             _container.Singleton<ClientViewModel, TescoViewModel>("Tesco");
             _container.Singleton<ClientViewModel, TargetViewModel>("Target");
-            _container.Singleton<LoggerManager>();
+            _container.Singleton<ILoggerManager,LoggerManager>();
             _container.AddExcelServices();
             _container.AddSharedServices();
 

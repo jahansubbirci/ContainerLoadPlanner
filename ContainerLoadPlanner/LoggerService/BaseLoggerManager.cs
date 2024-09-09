@@ -35,7 +35,11 @@ namespace LoggerService
                 MinimumLevel.Debug().
                 WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Information).WriteTo.File(@"Logs\Info" + extension, rollingInterval: RollingInterval.Day)).
                 WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error).WriteTo.File(@"Logs\Error" + extension, rollingInterval: RollingInterval.Day)).
-                WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug).WriteTo.File(@"Logs\Debug" + extension, rollingInterval: RollingInterval.Day)).
+#if DEBUG
+
+                WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug).WriteTo.File(@"Logs\Debug" + extension, rollingInterval: RollingInterval.Minute)).
+#endif
+                WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Warning).WriteTo.File(@"Logs\Warn" + extension, rollingInterval: RollingInterval.Day)).
                 CreateLogger();
         }
         public abstract void LogDebug(string message);

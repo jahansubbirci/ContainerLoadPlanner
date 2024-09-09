@@ -67,23 +67,23 @@ namespace TescoClpBackend.ContainerLoaders
         }
 
 
-        public double LoadQn(ref List<LotItem> lotList, ref Container<ClpItem> container)
+        protected virtual double LoadQn(ref List<LotItem> lotList, ref Container<ClpItem> container)
         {
-            //lotList.OrderByDescending(a=>a.TotalCbm).ToList();
-            
+            lotList.OrderByDescending(a => a.TotalCbm).ToList();
+
 
             var capacity = container.RemainingCapacity;
-          var  viableLot = lotList.Where(a => (capacity - a.TotalCbm) > 0).ToList();
+            var viableLot = lotList.Where(a => (capacity - a.TotalCbm) > 0).ToList();
             if (viableLot.Count() > 0)
             {
-             //   var viableLots = lotList.Where(a => (capacity - a.TotalCbm) >= 0);
+                //   var viableLots = lotList.Where(a => (capacity - a.TotalCbm) >= 0);
                 var closest = viableLot
 
-                    .Aggregate((x, y)=>
+                    .Aggregate((x, y) =>
                      (capacity - x.TotalCbm) >= 0
-                    && (capacity - y.TotalCbm )>= 0
+                    && (capacity - y.TotalCbm) >= 0
                     &&
-                     (capacity - x.TotalCbm) <( capacity - y.TotalCbm)
+                     (capacity - x.TotalCbm) < (capacity - y.TotalCbm)
                     ? x : y);
                 var cloned = closest.Clone() as LotItem;
                 if (container.Items.Sum(a => a.CfsReportItem.Cbm) + closest.TotalCbm
@@ -91,55 +91,83 @@ namespace TescoClpBackend.ContainerLoaders
                 {
                     container.Items.AddRange(closest.Item);
                     lotList.Remove(closest);
-                    container.RemainingCapacity -= closest.TotalCbm;
+                    container.UsedCbm+= closest.TotalCbm;
+                   // container.RemainingCapacity -= closest.TotalCbm;
                 }
-                //if (closest.TotalCbm > container.MaxCapacity)
-                //{
-                //    //var newcontainer= containers.Pop();
 
-                //    PickItemsSplitingLotToFillContainer(lotList, container, closest, cloned);
 
-                //}
-                else
-                {
-                    //SplitLot(container,ref closest);
-                    //break;
-                    //dcList.Remove(closest);
-                    //LoadQn(ref dcList, ref  container);
-                    //dcList.Add(cloned as CLPRow);
-                }
             }
             return container.RemainingCapacity;
+
+            //var loaded=   MaximizeSackUsage( lotList, container.RemainingCapacity);
+            //   var loadedItems = loaded.Select(a => a.Item).ToList();
+            //   foreach (var item in loadedItems)
+            //   {
+            //       var x=item.ToList();
+            //       container.Items.AddRange(x);
+            //       lotList.RemoveAll(a=>a==item);
+            //       //container.RemainingCapacity -= x.Sum(a => a.CfsReportItem.Cbm);
+            //   }
+
+            //return container.RemainingCapacity;
         }
 
-        private void PickItemsSplitingLotToFillContainer(List<LotItem> lotList, Container<ClpItem> container, LotItem closest, LotItem cloned)
+
+        public static List<LotItem> MaximizeSackUsage( List<LotItem> lotItems,double sackCapacity)
         {
-            double sum = 0d;
             
-            var cap = container.MaxCapacity;
-            var itemsToTake = closest.Item.TakeWhile(i => (sum += i.CfsReportItem.Cbm) <= cap).ToList();
+            // Convert TotalCbm to integer values by scaling to avoid floating-point precision issues
+            int scaleFactor = 10000;
+            int scaledCapacity = (int)(sackCapacity * scaleFactor);
+            List<int> scaledCbm = lotItems.Select(lot => (int)(lot.TotalCbm * scaleFactor)).ToList();
 
-            // Add the selected items to the container
-            container.Items.AddRange(itemsToTake);
+            // DP array to store the maximum weight possible without exceeding the scaled capacity
+            int[] dp = new int[scaledCapacity + 1];
+            bool[] isPossible = new bool[scaledCapacity + 1];
+            isPossible[0] = true;
 
-            // Remove the selected items from the lot list
-            lotList.Remove(closest);
+            // Track which LotItems are used to achieve the best weight
+            int[] lotUsed = new int[scaledCapacity + 1];
 
-            // Filter and group the remaining items from the cloned list
-            var remainingItems = cloned.Item
-                .Where(item => !itemsToTake.Contains(item))
-                .GroupBy(g => g.CfsReportItem.Lot)
-                .FirstOrDefault(a => a.Key == closest.Item.Key);
-
-            // Create a new LotItem with the remaining items and add it to the lot list
-            if (remainingItems != null)
+            // Dynamic Programming to find the closest weight to the sack capacity
+            for (int i = 0; i < scaledCbm.Count; i++)
             {
-                var clo = new LotItem(items: remainingItems);
-                lotList.Add(clo);
+                for (int j = scaledCapacity; j >= scaledCbm[i]; j--)
+                {
+                    if (isPossible[j - scaledCbm[i]])
+                    {
+                        int newWeight = dp[j - scaledCbm[i]] + scaledCbm[i];
+                        if (newWeight > dp[j])
+                        {
+                            dp[j] = newWeight;
+                            isPossible[j] = true;
+                            lotUsed[j] = i;
+                        }
+                    }
+                }
             }
 
-            // Update the remaining capacity of the container
-            container.RemainingCapacity -= itemsToTake.Sum(a => a.CfsReportItem.Cbm);
+            // Find the best weight close to the sack capacity
+            int bestWeight = 0;
+            for (int i = 0; i <= scaledCapacity; i++)
+            {
+                if (isPossible[i] && dp[i] > bestWeight)
+                {
+                    bestWeight = dp[i];
+                }
+            }
+
+            // Backtrack to find the LotItems used
+            List<LotItem> selectedLotItems = new List<LotItem>();
+            while (bestWeight > 0)
+            {
+                int usedLotIndex = lotUsed[bestWeight];
+                selectedLotItems.Add(lotItems[usedLotIndex]);
+                bestWeight -= scaledCbm[usedLotIndex];
+            }
+            
+
+            return selectedLotItems;
         }
 
 

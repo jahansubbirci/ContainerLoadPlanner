@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ClpEngine;
 using ContainerLoadPlanner.Models;
 using ContainerLoadPlanner.Views;
 using SharedEntities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace ContainerLoadPlanner.ViewModels
 {
-    public class CartWindowViewModel<T> : Screen where T : class
+    public class CartWindowViewModel<T> : Screen where T : ContainerItem
     {
         private  CartViewModel<T> _cartViewModel; // Example assuming 'object', replace with actual type
         

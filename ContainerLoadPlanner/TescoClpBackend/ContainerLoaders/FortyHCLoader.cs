@@ -22,21 +22,22 @@ namespace TescoClpBackend.ContainerLoaders
                 if (combination.FortyHITolerance > 0)
                 {
                     container.MaxCapacity = combination.FortyHITolerance + ContainerConstants.FORTY_HI_DEFAULT_CAPACITY;//ContainerConstants._40HIDefaultCapacity;
-                  
+
                 }
                 else
                 {
                     var bufferCap = 1;
-                    container.MaxCapacity = ContainerConstants.FORTY_HI_DEFAULT_CAPACITY+bufferCap;// ContainerConstants._40HIDefaultCapacity + 1;
+                    container.MaxCapacity = ContainerConstants.FORTY_HI_DEFAULT_CAPACITY + bufferCap;// ContainerConstants._40HIDefaultCapacity + 1;
                 }
 
-                container.RemainingCapacity = container.MaxCapacity;
-                container.MinAccepatableVolume = ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME;
+                //container.RemainingCapacity = container.MaxCapacity;
+                container.MinAcceptableVolume = ContainerConstants.FORTY_HI_MIN_ACCEPTABLE_VOLUME;
                 containers.Push(container);
             }
             return containers;
         }
     }
+       
     public class FortySTDLoader : ContainerLoader, IContainerLoader
     {
 
@@ -57,8 +58,8 @@ namespace TescoClpBackend.ContainerLoaders
                     var bufferCap=1;
                     container.MaxCapacity = ContainerConstants.FORTY_STD_DEFAULT_CAPACITY+bufferCap;// ContainerConstants._40DRYDefaultCapacity + 1;
                 }
-                container.RemainingCapacity = container.MaxCapacity;
-                container.MinAccepatableVolume = ContainerConstants.FORTY_STD_MIN_ACCEPTABLE_VOLUME;
+                //container.RemainingCapacity = container.MaxCapacity;
+                container.MinAcceptableVolume = ContainerConstants.FORTY_STD_MIN_ACCEPTABLE_VOLUME;
                 containers.Push(container);
             }
             return containers;

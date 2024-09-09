@@ -23,20 +23,23 @@ namespace ContainerLoadPlanner.Utilities
             container.Singleton<FortyHCLoader>(CombinatorConstants.REGULAR);
             container.Singleton<FortySTDLoader>();
             container.Singleton<MixedLoader>(CombinatorConstants.CUT_OFF);
-            container.RegisterInstance(
-                typeof(ClpPreparator), CombinatorConstants.REGULAR,
-                new ClpPreparator(
-                container.GetInstance<FortyHICombinator>(),
-                container.GetInstance<FortyHCLoader>(),
-                container.GetInstance<LoggerManager>())
-                );
+            container.Singleton<ContainerPacker>();
+            container.Singleton<IClpEngine, TescoClpEngine>();
 
-            container.RegisterInstance(
-                typeof(ClpPreparator), CombinatorConstants.CUT_OFF,
-             new ClpPreparator(
-                container.GetInstance<MixContainerCombinator>(),
-                container.GetInstance<MixedLoader>(),
-                container.GetInstance<LoggerManager>()));
+            //container.RegisterInstance(
+            //    typeof(ClpPreparator), CombinatorConstants.REGULAR,
+            //    new ClpPreparator(
+            //    container.GetInstance<FortyHICombinator>(),
+            //    container.GetInstance<FortyHCLoader>(),
+            //    container.GetInstance<LoggerManager>())
+            //    );
+
+            //container.RegisterInstance(
+            //    typeof(ClpPreparator), CombinatorConstants.CUT_OFF,
+            // new ClpPreparator(
+            //    container.GetInstance<MixContainerCombinator>(),
+            //    container.GetInstance<MixedLoader>(),
+            //    container.GetInstance<LoggerManager>()));
 
             container.Singleton<Reporting>();
             ReportingService service = container.GetInstance<ReportingService>();

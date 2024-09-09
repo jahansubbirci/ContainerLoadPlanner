@@ -27,8 +27,8 @@ namespace ContainerLoadPlanner.Utilities
         }
         public static void AddExcelServices(this SimpleContainer container)
         {
-            container.Singleton<IExcelDataReader,ExcelDataReaderV2>("general");
-            container.Singleton<IExcelDataReader, ExcelDataReaderWithFormula>("formula");
+            container.PerRequest<IExcelDataReader,ExcelDataReaderV2>("general");
+            container.PerRequest<IExcelDataReader, ExcelDataReaderWithFormula>("formula");
             
             container.Singleton<ExcelUtilities>();
         }

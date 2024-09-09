@@ -13,7 +13,7 @@ using TescoClpBackend.Models;
 
 namespace TescoClpBackend.ClpLogics
 {
-    public class ClpPreparator
+    public class ClpPreparator:IClpEngine
     {
         private readonly ICombinator combinator;
 
@@ -138,7 +138,7 @@ namespace TescoClpBackend.ClpLogics
                     LogLeftoverItems(priorityGroup);
 
                     var underUtilizedContainers =
-                        priorityContainers.Where(a => a.Items.Sum(i => i.CfsReportItem.Cbm) < a.MinAccepatableVolume).ToList();
+                        priorityContainers.Where(a => a.Items.Sum(i => i.CfsReportItem.Cbm) < a.MinAcceptableVolume).ToList();
                     foreach (var container in underUtilizedContainers)
                     {
                         containerLoader.FillUpUnderUtilizedContainer(container, ref nonPriorityGroup);
@@ -187,11 +187,11 @@ namespace TescoClpBackend.ClpLogics
 
                 destContainers[destination.Key].ForEach(a => a.UsedCbm = a.Items.Sum(i => i.CfsReportItem.Cbm));
                 var c = destContainers[destination.Key]
-                   .Where(a => a.UsedCbm < a.MinAccepatableVolume)
+                   .Where(a => a.UsedCbm < a.MinAcceptableVolume)
                    .ToList();
                 c.ForEach(a => a.Items.ForEach(i => loggerManager.LogInfo($"\tLeft Over:\t{i.CfsReportItem.ToString()}")));
 
-                destContainers[destination.Key].RemoveAll(a => a.UsedCbm < a.MinAccepatableVolume);
+                destContainers[destination.Key].RemoveAll(a => a.UsedCbm < a.MinAcceptableVolume);
 
             }
             SortContainers(ref destContainers);
@@ -218,7 +218,7 @@ namespace TescoClpBackend.ClpLogics
             {
                 Container<ClpItem> c = new Container<ClpItem>("40HI");
                 c.MaxCapacity = ContainerConstants.FORTY_HI_DEFAULT_CAPACITY + ContainerConstants.FORTY_HI_TOLERANCE;
-                c.RemainingCapacity = c.MaxCapacity;
+                //c.RemainingCapacity = c.MaxCapacity;
                 var clone = container.Clone() as LotItem;
                 double sum = 0d;
 
@@ -242,7 +242,7 @@ namespace TescoClpBackend.ClpLogics
                     lotGroups.Add(l);
                 }
 
-                c.RemainingCapacity -= itemsToTake.Sum(a => a.CfsReportItem.Cbm);
+               // c.RemainingCapacity -= itemsToTake.Sum(a => a.CfsReportItem.Cbm);
 
                 if (destContainers.ContainsKey(destination.Key))
                 {

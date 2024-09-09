@@ -43,31 +43,39 @@
             Margin="250,10,100,10"
             
             Background="LightBlue"
+            PreviewMouseWheel="SelectedContainers_PreviewMouseWheel"
              >
+            
             <ScrollViewer
+               md:ScrollViewerAssist.BubbleVerticalScroll="True"
                 Style="{DynamicResource MaterialDesignScrollViewer}"
                  BorderThickness="1"
                 md:ScrollBarAssist.ButtonsVisibility="Visible"
                 md:ScrollViewerAssist.CornerRectangleVisibility="Visible"
+                md:ScrollViewerAssist.ShowSeparators="True"
+                
                 
                 BorderBrush="{DynamicResource BorderBrush}"
                 VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+                
                 <Grid x:Name="myPanel"
                       Margin="10,0,10,0">
                     <ScrollViewer VerticalScrollBarVisibility="Visible" 
                                   HorizontalScrollBarVisibility="Visible"
                                   BorderThickness="1"
                                   CanContentScroll="True"
-                                  
+                                  Name="ContainerScrollViewer"
                                   BorderBrush="{DynamicResource BorderBrush}"
                                   Height="{Binding ElementName=mypanel, Path=ActualHeight}"
                                   >
+                      
                 <ItemsControl x:Name="SelectedContainers"
                               Margin="10,0,10,0"
                               HorizontalAlignment="Stretch"
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
                               md:ScrollViewerAssist.ShowSeparators="True"
-                              ScrollViewer.CanContentScroll="True">
+                              ScrollViewer.CanContentScroll="True"
+                              PreviewMouseWheel="SelectedContainers_PreviewMouseWheel">
                         
                     <ItemsControl.ItemTemplate>
 

@@ -22,7 +22,7 @@ namespace ContainerLoadPlanner.ViewModels
     public class TescoViewModel : ClientViewModel
     {
         private readonly IExcelDataReader excelDataReader;//{ get; set; }
-        private ClpPreparator clpPreparator;
+        private IClpEngine clpPreparator;
         private readonly CfsDataRetriever cfsDataRetriever;
         private readonly PoUploadReportDataLoader poUploadReportDataLoader;
         private readonly ExcelDataWriter2<ClpItem> excelDataWriter;
@@ -36,7 +36,7 @@ namespace ContainerLoadPlanner.ViewModels
             this.container = container;
             //  myMaerskReport = "";
             excelDataReader = container.GetInstance<IExcelDataReader>();
-            //clpPreparator = container.GetInstance<ClpPreparator>();
+            clpPreparator = container.GetInstance<IClpEngine>();
             cfsDataRetriever = container.GetInstance<CfsDataRetriever>();
             poUploadReportDataLoader = container.GetInstance<PoUploadReportDataLoader>();
             excelDataWriter = container.GetInstance<ExcelDataWriter2<ClpItem>>();
@@ -178,13 +178,17 @@ namespace ContainerLoadPlanner.ViewModels
         {
             try
             {
-                clpPreparator = CutOff
-                    ? container.GetInstance<ClpPreparator>(CombinatorConstants.CUT_OFF)
-                    : container.GetInstance<ClpPreparator>(CombinatorConstants.REGULAR);
+                //clpPreparator = CutOff
+                //    ? container.GetInstance<ClpPreparator>(CombinatorConstants.CUT_OFF)
+                //    : container.GetInstance<ClpPreparator>(CombinatorConstants.REGULAR);
 
                 var cfsData = await Task.Run(() => cfsDataRetriever.GetCfsData(this.CfsReport, this.CfsReportSheet, CfsReportRange, SelectedCfs));
+
+
+                cfsData.OrderByDescending(x => x.Lot).ToList().ForEach(a => loggerManager.LogDebug($"\tINITIAL CFS DATA\t{a.Destination}\t{a.Lot}"));
                 var poData = await Task.Run(() => poUploadReportDataLoader.GetPoReport(MyMaerskReport,this.myMaerskReportSheet,this.MyMaerskReportRange));
                 cfsData = cfsData.Where(a => !a.Measurement.Equals("0X0X0"));
+                cfsData. OrderByDescending(x => x.Lot).ToList().ForEach(a => loggerManager.LogDebug($"\tREMOVED 0X0X0\t{a.Destination}\t{a.Lot}"));
                 var clp = clpPreparator.Create(cfsData, poData, _settings);
                 CartData = clp;
 
@@ -252,20 +256,21 @@ namespace ContainerLoadPlanner.ViewModels
                     {
                         //Label = container.Label,
                         MaxCapacity = container.MaxCapacity,
-                        MinAccepatableVolume = container.MinAccepatableVolume,
+                        MinAcceptableVolume = container.MinAcceptableVolume,
                         ContainerId = container.ContainerId,
-                        RemainingCapacity = container.RemainingCapacity,
+                       // RemainingCapacity = container.RemainingCapacity,
                         UsedCbm = container.UsedCbm,
                         UnitCost = container.UnitCost,
                         Items = new List<ClpDto>()
                     };
 
-                    foreach (var clpItem in container.Items)
+                    foreach (var clpItem in container.Items.OrderBy(a=>a.CfsReportItem.Split)
+                        .ThenByDescending(a=>a.CfsReportItem.Lot))
                     {
                         ClpDto clpDto = new ClpDto(clpItem.CfsReportItem, clpItem.PoUploadReportItem);
                         clpDtoContainer.Items.Add(clpDto);
                     }
-
+                    
                     clpDtoList.Add(clpDtoContainer);
                 }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClpEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using TescoClpBackend.ClpLogics;
 namespace TescoClpBackend.Models
 {
 
-    public class LotItem : ICloneable
+    public class LotItem :ContainerItem, ICloneable
     {
         public IGrouping<int, ClpItem> Item { get; set; }
         public double TotalCbm { get; set; }
@@ -16,11 +17,14 @@ namespace TescoClpBackend.Models
         public LotItem(IGrouping<int, ClpItem> items)
         {
             Item = items;
-            TotalCbm = items.Sum(a => a.CfsReportItem.Cbm);
+            TotalCbm = items.Sum(a => a.Cbm);
+        }
+        public LotItem()
+        {
         }
         public object Clone()
         {
-            return this;// throw new NotImplementedException();
+            return this.MemberwiseClone();// throw new NotImplementedException();
         }
 
         //internal object Clone()

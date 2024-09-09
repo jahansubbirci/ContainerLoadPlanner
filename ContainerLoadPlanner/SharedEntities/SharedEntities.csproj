@@ -83,6 +83,10 @@
       <Project>{564182c6-8609-45dc-a0a6-3d9df37f2594}</Project>
       <Name>ExcelDataExchange</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ClpEngine\ClpEngine.csproj">
+      <Project>{da509752-6d6c-45b8-a899-0db41a779f6e}</Project>
+      <Name>ClpEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="container-constants.json">

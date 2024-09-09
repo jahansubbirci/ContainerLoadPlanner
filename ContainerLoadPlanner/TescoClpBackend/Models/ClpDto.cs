@@ -1,66 +1,68 @@
-﻿using ÉxcelDataExchange;
+﻿using ClpEngine;
+using ÉxcelDataExchange;
 using SharedEntities;
 using System;
 
 namespace TescoClpBackend.Models
 {
-    public class ClpDto
+    public class ClpDto : ContainerItem
     {
-       
 
-        public ClpDto(CfsReport cfsReportItem,PoUploadReportItem poUploadItem)
+
+        public ClpDto(CfsReport cfsReportItem, PoUploadReportItem poUploadItem)
         {
             //this.cfsReportItem = cfsReportItem;
             //this.poUploadItem = poUploadItem;
             SO = cfsReportItem.So;
-            Consignee= cfsReportItem.Consignee;
-            Shipper= cfsReportItem.Shipper;
-            Lot= cfsReportItem.Lot.ToString();
-            Pkgs= cfsReportItem.Pkgs;
-            Qty= cfsReportItem.Qty;
-            Measurement= cfsReportItem.Measurement;
-            Cbm= cfsReportItem.Cbm;
-            CWeight = CWeight;
-            Destination= cfsReportItem.Destination;
-            PO= cfsReportItem.PO;
-            Style= cfsReportItem.Style;
-            Item= cfsReportItem.Item;
+            Consignee = cfsReportItem.Consignee;
+            Shipper = cfsReportItem.Shipper;
+            Lot = cfsReportItem.Lot.ToString();
+            Pkgs = cfsReportItem.Pkgs;
+            Qty = cfsReportItem.Qty;
+            Measurement = cfsReportItem.Measurement;
+            Cbm = cfsReportItem.Cbm;
+            CWeight = cfsReportItem.CWeight;
+            Destination = cfsReportItem.Destination;
+            PO = cfsReportItem.PO;
+            Style = cfsReportItem.Style;
+            Item = cfsReportItem.Item;
             TpnLc = cfsReportItem.TpnLc;
-            RefSize= cfsReportItem.RefSize;
-            RmsStyle=cfsReportItem.RmsStyle;
-            Category= cfsReportItem.Category;
-            Division= cfsReportItem.Division;
-            Department= cfsReportItem.Department;
+            RefSize = cfsReportItem.RefSize;
+            RmsStyle = cfsReportItem.RmsStyle;
+            Category = cfsReportItem.Category;
+            Division = cfsReportItem.Division;
+            Department = cfsReportItem.Department;
 
             RCgo = cfsReportItem.RCgo;
-            SB= cfsReportItem.SB;
-            RecvDoc= cfsReportItem.RecvDoc;
-            SbDate= cfsReportItem.SbDate;
-            ErdDate= cfsReportItem.ErdDate;
-            CustomsHouseCode= cfsReportItem.CustomsHouseCode;
-            InvoiceValue= cfsReportItem.InvoiceValue;
-            Vat= cfsReportItem.Vat;
-            Loc= cfsReportItem.Loc;
-            Commodity= cfsReportItem.Commodity;
+            SB = cfsReportItem.SB;
+            RecvDoc = cfsReportItem.RecvDoc;
+            SbDate = cfsReportItem.SbDate;
+            ErdDate = cfsReportItem.ErdDate;
+            CustomsHouseCode = cfsReportItem.CustomsHouseCode;
+            InvoiceValue = cfsReportItem.InvoiceValue;
+            Vat = cfsReportItem.Vat;
+            Loc = cfsReportItem.Loc;
+            Commodity = cfsReportItem.Commodity;
             EHD = poUploadItem.EHD;
-            IDD= poUploadItem.IDD;
-            TransportationMode= poUploadItem.TransportationMode;
+            IDD = poUploadItem.IDD;
+            TransportationMode = poUploadItem.TransportationMode;
             Remarks = cfsReportItem.Remarks;
-            Overflow= cfsReportItem.Overflow;
+            Overflow = cfsReportItem.Overflow;
             StuffingHeldupRemarks = cfsReportItem.StuffingHeldupRemarks;
             Account = cfsReportItem.Account;
-            Forwarder= cfsReportItem.Forwarder;
-            Clr= cfsReportItem.Clr;
-            Sku= cfsReportItem.Sku;
-            StrokeNo= cfsReportItem.StrokeNo;
+            Forwarder = cfsReportItem.Forwarder;
+            Clr = cfsReportItem.Clr;
+            Sku = cfsReportItem.Sku;
+            StrokeNo = cfsReportItem.StrokeNo;
             RailNo = cfsReportItem.RailNo;
             InvoiceNo = cfsReportItem.InvoiceNo;
-            Id= cfsReportItem.Id;
-
+            Id = cfsReportItem.Id;
+            Split = cfsReportItem.Split;
+            
         }
 
         [ColumnHeader("S/O")]
-        public string SO { get;private set; }
+        public string SO { get; private set; }
         public string Consignee { get; set; }
         public string Shipper { get; set; }
         public string Lot { get; set; }
@@ -73,9 +75,9 @@ namespace TescoClpBackend.Models
         [ColumnHeader("DEST")]
         public string Destination { get; set; }
         public string PO { get; set; }
-       
+      
 
-        
+
 
         public DateTime EHD { get; set; }
         [ColumnHeader("MODE")]
@@ -114,6 +116,10 @@ namespace TescoClpBackend.Models
         public string StrokeNo { get; set; }
         public string RailNo { get; set; }
         public string InvoiceNo { get; set; }
+
         public string Id { get; set; }
+
+        // [Visible(false)]
+        public bool Split { get; set; }
     }
 }

@@ -27,5 +27,16 @@ namespace ContainerLoadPlanner.Views
             this.WindowState= System.Windows.WindowState.Maximized;
             this.UpdateLayout();
         }
+
+        private void SelectedContainers_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ContainerScrollViewer.ScrollToVerticalOffset(ContainerScrollViewer.VerticalOffset - e.Delta / 3);
+            e.Handled = true;
+        }
+
+        private void ScrollViewer_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+
+        }
     }
 }

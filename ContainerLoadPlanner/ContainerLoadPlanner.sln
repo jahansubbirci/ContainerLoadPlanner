@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TescoClpBackend.Test", "TescoClpBackend.Test\TescoClpBackend.Test.csproj", "{2D5678D7-883E-4159-832C-C3449CCC6ED5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClpEngine", "ClpEngine\ClpEngine.csproj", "{DA509752-6D6C-45B8-A899-0DB41A779F6E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,18 @@ Global
 		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|x64.Build.0 = Release|x64
 		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|x86.ActiveCfg = Release|Any CPU
 		{2D5678D7-883E-4159-832C-C3449CCC6ED5}.Release|x86.Build.0 = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|x64.Build.0 = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Debug|x86.Build.0 = Debug|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|x64.ActiveCfg = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|x64.Build.0 = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|x86.ActiveCfg = Release|Any CPU
+		{DA509752-6D6C-45B8-A899-0DB41A779F6E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
