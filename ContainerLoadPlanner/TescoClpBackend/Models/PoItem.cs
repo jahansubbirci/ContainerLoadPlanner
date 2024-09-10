@@ -8,32 +8,23 @@ using TescoClpBackend.ClpLogics;
 
 namespace TescoClpBackend.Models
 {
-
-    public class LotItem :/*ItemUnit<ClpItem>*/ContainerItem, ICloneable
+    public class PoItem:ContainerItem,ICloneable
     {
-        public IGrouping<int, ClpItem> Items { get; set; }
+        public IGrouping<string, ClpItem> Items { get; set; }
         public double TotalCbm { get; set; }
         public int Priority { get; set; }
-        public LotItem(IGrouping<int, ClpItem> items)
+        public PoItem(IGrouping<string, ClpItem> items)
         {
-            
+
             Items = items;
             TotalCbm = items.Sum(a => a.Cbm);
         }
-        public LotItem()
+        public PoItem()
         {
         }
         public object Clone()
         {
             return this.MemberwiseClone();// throw new NotImplementedException();
         }
-
-        //internal object Clone()
-        //{
-        //    return this;
-        //}
-
-
-
     }
 }

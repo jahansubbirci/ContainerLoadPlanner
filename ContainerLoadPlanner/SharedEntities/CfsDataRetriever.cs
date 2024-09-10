@@ -72,7 +72,7 @@ namespace SharedEntities
                     //cfsReportItem.StrokeNo = row["STROKE NO."].ToString();
                     //cfsReportItem.RailNo = row["RAIL NO."].ToString();
                     //cfsReportItem.InvoiceNo = row["INVOICE NO"].ToString();
-                    //cfsReportItem.Id = row["#ID"].ToString();
+                    cfsReportItem.Id = row["#ID"].ToString();
                     try
                     {
                         cfsReportItem.Lot = Convert.ToInt32(row["LOT"].ToString().Trim());

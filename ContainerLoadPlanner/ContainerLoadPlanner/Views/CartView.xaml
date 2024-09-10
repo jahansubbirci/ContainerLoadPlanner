@@ -45,7 +45,11 @@
             Background="LightBlue"
             PreviewMouseWheel="SelectedContainers_PreviewMouseWheel"
              >
-            
+             <TextBlock 
+                 HorizontalAlignment="Center"
+                 FontSize="13"
+                 FontWeight="Bold"
+                 Text="{Binding SelectedContainers.Count,StringFormat='Total Containers: {0}'}" />
             <ScrollViewer
                md:ScrollViewerAssist.BubbleVerticalScroll="True"
                 Style="{DynamicResource MaterialDesignScrollViewer}"
@@ -71,20 +75,23 @@
                       
                 <ItemsControl x:Name="SelectedContainers"
                               Margin="10,0,10,0"
-                              HorizontalAlignment="Stretch"
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
                               md:ScrollViewerAssist.ShowSeparators="True"
                               ScrollViewer.CanContentScroll="True"
-                              PreviewMouseWheel="SelectedContainers_PreviewMouseWheel">
+                              PreviewMouseWheel="SelectedContainers_PreviewMouseWheel"
+                              >
                         
                     <ItemsControl.ItemTemplate>
 
                         <DataTemplate>
-                            
-                                <local:ContainerView DataContext="{Binding}"
+                                    <StackPanel>
+
+                              
+                                        <local:ContainerView DataContext="{Binding}"
                                                      Margin="10,0,10,0"/>
-                                    
-                        </DataTemplate>
+                                    </StackPanel>
+
+                                </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                     </ScrollViewer>

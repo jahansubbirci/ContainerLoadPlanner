@@ -37,7 +37,7 @@ namespace TescoClpBackend.ContainerLoaders
                 //If Lot Contains one high priority PO, all PO should be high priority
                 lotGroup.ForEach(a =>
                 {
-                    if (a.Item.Any(item => item.PoUploadReportItem.Priority>0))
+                    if (a.Items.Any(item => item.PoUploadReportItem.Priority>0))
                     {
                         a.Priority = Int32.MaxValue;
                     }
@@ -89,7 +89,7 @@ namespace TescoClpBackend.ContainerLoaders
                 if (container.Items.Sum(a => a.CfsReportItem.Cbm) + closest.TotalCbm
                     <= container.MaxCapacity)
                 {
-                    container.Items.AddRange(closest.Item);
+                    container.Items.AddRange(closest.Items);
                     lotList.Remove(closest);
                     container.UsedCbm+= closest.TotalCbm;
                    // container.RemainingCapacity -= closest.TotalCbm;

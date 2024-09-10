@@ -76,6 +76,7 @@
     <Compile Include="Models\ClpEngineSettings.cs" />
     <Compile Include="Models\Container.cs" />
     <Compile Include="Models\LotItem.cs" />
+    <Compile Include="Models\PoItem.cs" />
     <Compile Include="Models\PoUploadReportItem.cs" />
     <Compile Include="PoUploadReportDataLoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

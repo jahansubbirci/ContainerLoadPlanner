@@ -47,7 +47,7 @@ namespace SharedEntities.Reporting
             {
                 var row = sheet.CreateRow(i);
                 var cell = row.CreateCell(0);
-                cell.SetCellValue($"{label.Count()}X{label.Key}");
+                cell.SetCellValue($"{value.Count()}X{label.Key}");
             }
         }
 

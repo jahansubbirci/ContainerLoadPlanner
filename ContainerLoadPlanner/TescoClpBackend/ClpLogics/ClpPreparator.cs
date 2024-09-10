@@ -98,7 +98,7 @@ namespace TescoClpBackend.ClpLogics
                 var lotGroups = destItems.GroupBy(a => a.CfsReportItem.Lot).Select(lot => new LotItem(lot)).ToList();
                 lotGroups.ForEach(a =>
                 {
-                    if (a.Item.Any(i => i.PoUploadReportItem.Priority > 0))
+                    if (a.Items.Any(i => i.PoUploadReportItem.Priority > 0))
                     {
                         a.Priority = Int32.MaxValue;
                     }
@@ -116,14 +116,14 @@ namespace TescoClpBackend.ClpLogics
                     {
                         foreach (var p in priority)
                         {
-                            priorityGroup.AddRange(p.Item.Select(i => i));
+                            priorityGroup.AddRange(p.Items.Select(i => i));
                         }
                     }
                     else
                     {
                         foreach (var p in priority)
                         {
-                            nonPriorityGroup.AddRange(p.Item.Select(i => i));
+                            nonPriorityGroup.AddRange(p.Items.Select(i => i));
                         }
                     }
                 }
@@ -223,18 +223,18 @@ namespace TescoClpBackend.ClpLogics
                 double sum = 0d;
 
                 var cap = c.MaxCapacity;
-                var itemsToTake = container.Item.TakeWhile(i => (sum += i.CfsReportItem.Cbm) <= cap).ToList();
+                var itemsToTake = container.Items.TakeWhile(i => (sum += i.CfsReportItem.Cbm) <= cap).ToList();
                 c.Items.AddRange(itemsToTake);
 
                 //var remainingItems = container.Item.Where(a => !itemsToTake.Contains(a)).ToList();
 
                 lotGroups.Remove(container);
 
-                var remainingItems = clone.Item
+                var remainingItems = clone.Items
                     .Where(item => !itemsToTake.Contains(item)).ToList();
                 remainingItems.ForEach(a => a.PoUploadReportItem.Priority = Int32.MaxValue);
                 var remainingItem = remainingItems.GroupBy(a => a.CfsReportItem.Lot)
-                    .First(a => a.Key == clone.Item.Key);
+                    .First(a => a.Key == clone.Items.Key);
                 if (remainingItem != null)
                 {
 
@@ -266,7 +266,7 @@ namespace TescoClpBackend.ClpLogics
                 in singleContainerLots)
             {
                 Container<ClpItem> c = new Container<ClpItem>("40HI");
-                c.Items.AddRange(singleContainerLot.Item);
+                c.Items.AddRange(singleContainerLot.Items);
                 if (destContainers.ContainsKey(destination.Key))
                 {
                     destContainers[destination.Key].Add(c);
