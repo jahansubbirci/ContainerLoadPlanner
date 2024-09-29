@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TescoClpBackend;
+using TescoClpBackend.Algorithms;
 using TescoClpBackend.ClpLogics;
 using TescoClpBackend.Combinators;
 using TescoClpBackend.ContainerLoaders;
@@ -23,7 +24,8 @@ namespace ContainerLoadPlanner.Utilities
             container.Singleton<FortyHCLoader>(CombinatorConstants.REGULAR);
             container.Singleton<FortySTDLoader>();
             container.Singleton<MixedLoader>(CombinatorConstants.CUT_OFF);
-            container.Singleton<ContainerPacker>();
+            container.Singleton<IContainerPacker, DivideAndConquerAlgorithm>();
+            //container.Singleton<IContainerPacker, BackTrackingContainerPacker>();
             container.Singleton<IClpEngine, TescoClpEngine>();
 
             //container.RegisterInstance(

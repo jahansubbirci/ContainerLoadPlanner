@@ -37,7 +37,7 @@ namespace LoggerService
                 WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Error).WriteTo.File(@"Logs\Error" + extension, rollingInterval: RollingInterval.Day)).
 #if DEBUG
 
-                WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug).WriteTo.File(@"Logs\Debug" + extension, rollingInterval: RollingInterval.Minute)).
+                WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Debug).WriteTo.File(@"Logs\Debug" + extension, rollingInterval: RollingInterval.Hour)).
 #endif
                 WriteTo.Logger(l => l.Filter.ByIncludingOnly(e => e.Level == LogEventLevel.Warning).WriteTo.File(@"Logs\Warn" + extension, rollingInterval: RollingInterval.Day)).
                 CreateLogger();

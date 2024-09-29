@@ -13,7 +13,7 @@ namespace SharedEntities
         VERTEX,
         KDS
     }
-    public class CfsReport
+    public class CfsReport:ICloneable
     {
 
         public CfsReport() { }
@@ -58,6 +58,11 @@ namespace SharedEntities
         public string Id { get; set; }
         public string Account { get; set; }
         public bool Split { get; set; }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         public override string ToString()
         {

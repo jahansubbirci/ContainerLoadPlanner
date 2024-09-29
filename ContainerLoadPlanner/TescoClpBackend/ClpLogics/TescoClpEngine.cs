@@ -16,12 +16,12 @@ namespace TescoClpBackend.ClpLogics
         private readonly ICombinator combinator;
         private readonly IContainerLoader containerLoader;
         private readonly ILoggerManager loggerManager;
-        private readonly ContainerPacker containerPacker;
+        private readonly IContainerPacker containerPacker;
 
         public TescoClpEngine(ICombinator combinator,
             IContainerLoader containerLoader,
             ILoggerManager loggerManager,
-            ContainerPacker containerPacker)
+            IContainerPacker containerPacker)
         {
             this.combinator = combinator;
             this.containerLoader = containerLoader;

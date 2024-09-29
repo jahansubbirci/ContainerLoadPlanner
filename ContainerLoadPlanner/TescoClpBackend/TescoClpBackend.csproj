@@ -60,10 +60,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\DivideAndConquerAlgorithm.cs" />
+    <Compile Include="ClpLogics\BackTrackAlgorithm.cs" />
     <Compile Include="ClpLogics\ClpItem.cs" />
     <Compile Include="ClpLogics\ClpPreparator.cs" />
     <Compile Include="ClpLogics\ContainerPacker.cs" />
+    <Compile Include="ClpLogics\ContainerPackerBase.cs" />
+    <Compile Include="ClpLogics\GenericBackTrackingAlgorithm.cs" />
     <Compile Include="ClpLogics\IClpEngine.cs" />
+    <Compile Include="ClpLogics\IContainerPacker.cs" />
     <Compile Include="ClpLogics\TescoClpEngine.cs" />
     <Compile Include="Combinators\Combinator.cs" />
     <Compile Include="Combinators\CombinatorConstants.cs" />
@@ -72,6 +77,7 @@
     <Compile Include="ContainerLoaders\IContainerLoader.cs" />
     <Compile Include="ContainerLoaders\FortyHCLoader.cs" />
     <Compile Include="DateHelper.cs" />
+    <Compile Include="Models\BaseGroupItem.cs" />
     <Compile Include="Models\ClpDto.cs" />
     <Compile Include="Models\ClpEngineSettings.cs" />
     <Compile Include="Models\Container.cs" />

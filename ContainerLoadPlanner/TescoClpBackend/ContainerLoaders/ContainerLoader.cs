@@ -112,6 +112,51 @@ namespace TescoClpBackend.ContainerLoaders
             //return container.RemainingCapacity;
         }
 
+        protected  static double LoadQns(ref List<LotItem> lotList, ref Container<ClpItem> container)
+        {
+            lotList.OrderByDescending(a => a.TotalCbm).ToList();
+
+
+            var capacity = container.RemainingCapacity;
+            var viableLot = lotList.Where(a => (capacity - a.TotalCbm) > 0).ToList();
+            if (viableLot.Count() > 0)
+            {
+                //   var viableLots = lotList.Where(a => (capacity - a.TotalCbm) >= 0);
+                var closest = viableLot
+
+                    .Aggregate((x, y) =>
+                     (capacity - x.TotalCbm) >= 0
+                    && (capacity - y.TotalCbm) >= 0
+                    &&
+                     (capacity - x.TotalCbm) < (capacity - y.TotalCbm)
+                    ? x : y);
+                var cloned = closest.Clone() as LotItem;
+                if (container.Items.Sum(a => a.CfsReportItem.Cbm) + closest.TotalCbm
+                    <= container.MaxCapacity)
+                {
+                    container.Items.AddRange(closest.Items);
+                    lotList.Remove(closest);
+                    container.UsedCbm += closest.TotalCbm;
+                    // container.RemainingCapacity -= closest.TotalCbm;
+                }
+
+
+            }
+            return container.RemainingCapacity;
+
+            //var loaded=   MaximizeSackUsage( lotList, container.RemainingCapacity);
+            //   var loadedItems = loaded.Select(a => a.Item).ToList();
+            //   foreach (var item in loadedItems)
+            //   {
+            //       var x=item.ToList();
+            //       container.Items.AddRange(x);
+            //       lotList.RemoveAll(a=>a==item);
+            //       //container.RemainingCapacity -= x.Sum(a => a.CfsReportItem.Cbm);
+            //   }
+
+            //return container.RemainingCapacity;
+        }
+
 
         public static List<LotItem> MaximizeSackUsage( List<LotItem> lotItems,double sackCapacity)
         {
@@ -189,6 +234,22 @@ namespace TescoClpBackend.ContainerLoaders
 
             }
         }
+        private static void LoadUntilCaps(ref List<LotItem> lotGroup, ref Container<ClpItem> container, double previousCapacity)
+        {
+
+            while (container.RemainingCapacity > 0 && lotGroup.Count() > 0)
+            {
+                previousCapacity = container.RemainingCapacity;
+                /*(dcList,container)=*/
+                var capacity = LoadQns(ref lotGroup, ref container);
+                if (previousCapacity == capacity)
+                {
+                    break;
+                }
+
+
+            }
+        }
 
         protected abstract Stack<Container<ClpItem>> InitiateContainers(Combination combination);
 
@@ -202,6 +263,29 @@ namespace TescoClpBackend.ContainerLoaders
             
             LoadUntilCap(ref lg, ref container,container.RemainingCapacity);
             nonPriorityGroup.RemoveAll(a => container.Items.Contains(a));
+            //var sum = 0d;
+            //var itemsToTake = lg.TakeWhile(c => (sum + c.TotalCbm) < container.RemainingCapacity).ToList();
+            ////container.Items.AddRange(itemsToTake);
+            //foreach (var item in itemsToTake)
+            //{
+            //    container.Items.AddRange(item.Item.ToList());
+            //}
+            //foreach (var item in itemsToTake)
+            //{
+            //    nonPriorityGroup.RemoveAll(a => item.Item.Select(i => i).Contains(a));
+            //}
+        }
+
+      public static void FillUpUnderUtilizedContainers(Container<ClpItem> container, ref List<LotItem> nonPriorityGroup)
+        {
+            //var lg = nonPriorityGroup
+            //    .GroupBy(a => a.CfsReportItem.Lot)
+            //    .Select(lot => new LotItem(lot))
+            //    .ToList();
+            var lg = nonPriorityGroup;
+            LoadUntilCaps(ref lg, ref container, container.RemainingCapacity);
+           // nonPriorityGroup.RemoveAll(a => container.Items.Contains(a..Items));
+            
             //var sum = 0d;
             //var itemsToTake = lg.TakeWhile(c => (sum + c.TotalCbm) < container.RemainingCapacity).ToList();
             ////container.Items.AddRange(itemsToTake);
